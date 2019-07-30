@@ -1,85 +1,18 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li>
-        <a
-          href="https://vuejs.org"
-          target="_blank"
-        >
-          Core Docs
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://forum.vuejs.org"
-          target="_blank"
-        >
-          Forum
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://chat.vuejs.org"
-          target="_blank"
-        >
-          Community Chat
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://twitter.com/vuejs"
-          target="_blank"
-        >
-          Twitter
-        </a>
-      </li>
-      <br>
-      <li>
-        <a
-          href="http://vuejs-templates.github.io/webpack/"
-          target="_blank"
-        >
-          Docs for This Template
-        </a>
-      </li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li>
-        <a
-          href="http://router.vuejs.org/"
-          target="_blank"
-        >
-          vue-router
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vuex.vuejs.org/"
-          target="_blank"
-        >
-          vuex
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vue-loader.vuejs.org/"
-          target="_blank"
-        >
-          vue-loader
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/awesome-vue"
-          target="_blank"
-        >
-          awesome-vue
-        </a>
-      </li>
-    </ul>
+    <fish-form style="width: 300px; display: inline-block;">
+      <fish-field label="Username">
+        <fish-input v-model="username"></fish-input>
+      </fish-field>
+      <fish-field label="Password">
+        <fish-input v-model="password"></fish-input>
+      </fish-field>
+      <fish-field>
+        <fish-checkbox index="yes">Remember me?</fish-checkbox>
+      </fish-field>
+      <fish-button type="primary" v-on:click="login">Submit</fish-button>
+    </fish-form>
   </div>
 </template>
 
@@ -88,7 +21,19 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App asdqqwe'
+      msg: 'Login to Websocket server',
+      username: '',
+      password: ''
+    }
+  },
+  methods: {
+    login: function () {
+      let a = this.create_request('Login', {username: this.username, password: this.password})
+      console.log(a)
+      this.$socket.sendObj(a)
+    },
+    create_request: function (event, body = '') {
+      return {event: event, body: body, timestamp: '1'}
     }
   }
 }
