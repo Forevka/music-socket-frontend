@@ -7,10 +7,14 @@ import VueNativeSock from 'vue-native-websocket'
 import Vuex from 'vuex'
 import FishUI from 'fish-ui'
 
+import VueSidebarMenu from 'vue-sidebar-menu'
+import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
+
 Vue.config.productionTip = false
 
 Vue.use(FishUI)
 Vue.use(Vuex)
+Vue.use(VueSidebarMenu)
 Vue.use(VueNativeSock, 'ws://localhost:5678', {
   format: 'json'
 })

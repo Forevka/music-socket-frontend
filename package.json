@@ -11,15 +11,19 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@fortawesome/free-brands-svg-icons": "^5.10.0",
+    "@fortawesome/free-regular-svg-icons": "^5.10.0",
     "fish-ui": "^1.1.74",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
     "vue": "^2.5.2",
     "vue-native-websocket": "^2.0.13",
     "vue-router": "^3.0.1",
+    "vue-sidebar-menu": "^3.12.2",
     "vuex": "^3.1.1"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.10.0",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^8.2.1",

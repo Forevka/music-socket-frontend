@@ -1,6 +1,7 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
+    <sidebar-menu :menu="menu" />
     <fish-form style="width: 300px; display: inline-block;">
       <fish-field label="Username">
         <fish-input v-model="username"></fish-input>
@@ -23,7 +24,32 @@ export default {
     return {
       msg: 'Login to Websocket server',
       username: '',
-      password: ''
+      password: '',
+      menu: [
+        {
+          header: true,
+          title: 'Menu'
+        },
+        {
+          href: '/',
+          title: 'User',
+          icon: 'fa fa-user'
+        },
+        {
+          title: 'Channels',
+          icon: 'fa fa-bullhorn',
+          child: [
+            {
+              href: '/channels',
+              title: 'All Channels'
+            },
+            {
+              href: '/channels/my',
+              title: 'My Channels'
+            }
+          ]
+        }
+      ]
     }
   },
   methods: {
