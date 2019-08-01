@@ -9,6 +9,7 @@ import FishUI from 'fish-ui'
 
 import VueSidebarMenu from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
+import MenuStore from './stores/MenuStore'
 
 Vue.config.productionTip = false
 
@@ -23,6 +24,7 @@ Vue.use(VueNativeSock, 'ws://localhost:5678', {
 new Vue({
   el: '#app',
   router,
+  store: { MenuStore },
   components: { App },
   template: '<App/>'
 })

@@ -1,7 +1,6 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <sidebar-menu :menu="menu" />
     <fish-form style="width: 300px; display: inline-block;">
       <fish-field label="Username">
         <fish-input v-model="username"></fish-input>
@@ -13,6 +12,7 @@
         <fish-checkbox index="yes">Remember me?</fish-checkbox>
       </fish-field>
       <fish-button type="primary" v-on:click="login">Submit</fish-button>
+      <fish-button type="primary" v-on:click="change_menu">Change Menu</fish-button>
     </fish-form>
   </div>
 </template>
@@ -24,32 +24,7 @@ export default {
     return {
       msg: 'Login to Websocket server',
       username: '',
-      password: '',
-      menu: [
-        {
-          header: true,
-          title: 'Menu'
-        },
-        {
-          href: '/',
-          title: 'User',
-          icon: 'fa fa-user'
-        },
-        {
-          title: 'Channels',
-          icon: 'fa fa-bullhorn',
-          child: [
-            {
-              href: '/channels',
-              title: 'All Channels'
-            },
-            {
-              href: '/channels/my',
-              title: 'My Channels'
-            }
-          ]
-        }
-      ]
+      password: ''
     }
   },
   methods: {
@@ -60,6 +35,10 @@ export default {
     },
     create_request: function (event, body = '') {
       return {event: event, body: body, timestamp: '1'}
+    },
+    change_menu: function () {
+      console.log('changing menu')
+      this.$store.MenuStore.dispatch('changeMenu')
     }
   }
 }
