@@ -15,6 +15,19 @@ export default {
   name: 'App',
   components: {
     SideMenu
+  },
+  data () {
+    return {
+      username: '',
+      password: '',
+      logged: false
+    }
+  },
+  mounted () {
+    if (localStorage.username && localStorage.password) {
+      this.username = localStorage.username
+      this.password = localStorage.password
+    }
   }
 }
 </script>

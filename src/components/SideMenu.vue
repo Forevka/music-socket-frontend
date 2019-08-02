@@ -1,6 +1,8 @@
 <template>
   <div class="menu-menu">
-    <sidebar-menu :menu=menu @item-click="onItemClick" :collapsed=collapsed @collapse="onCollapse"/>
+    <sidebar-menu :menu=menu @item-click="onItemClick" :collapsed=collapsed @collapse="onCollapse" width="300px" widthCollapsed="50px">
+      <span slot="collapse-icon"></span>
+    </sidebar-menu>
   </div>
 </template>
 
@@ -25,3 +27,10 @@ export default {
   }
 }
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style>
+.v-sidebar-menu .collapse-btn {
+  visibility: hidden;
+}
+</style>
