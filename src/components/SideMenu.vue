@@ -1,6 +1,6 @@
 <template>
   <div class="menu-menu">
-    <sidebar-menu :menu=menu />
+    <sidebar-menu :menu=menu @item-click="onItemClick" :collapsed=collapsed @collapse="onCollapse"/>
   </div>
 </template>
 
@@ -9,8 +9,18 @@ export default {
   name: 'SideMenu',
   computed: {
     menu () {
-      console.log(this)
       return this.$store.MenuStore.getters.getMenu
+    },
+    collapsed () {
+      return true
+    }
+  },
+  methods: {
+    onCollapse (collapsed) {
+      console.log('on collaps')
+    },
+    onItemClick (event, item) {
+      console.log('on item click')
     }
   }
 }

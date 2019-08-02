@@ -19,7 +19,7 @@
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'Dashboard',
   data () {
     return {
       msg: 'Login to Websocket server',
