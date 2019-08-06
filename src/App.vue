@@ -19,8 +19,7 @@ export default {
   data () {
     return {
       username: '',
-      password: '',
-      logged: false
+      password: ''
     }
   },
   mounted () {

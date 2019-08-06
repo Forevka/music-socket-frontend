@@ -10,14 +10,37 @@ import FishUI from 'fish-ui'
 import VueSidebarMenu from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 import MenuStore from './stores/MenuStore'
+import SocketStore from './stores/SocketStore'
+import {
+  SOCKET_ONOPEN,
+  SOCKET_ONCLOSE,
+  SOCKET_ONERROR,
+  SOCKET_ONMESSAGE,
+  SOCKET_RECONNECT,
+  SOCKET_RECONNECT_ERROR
+} from './stores/SocketMutationTypes'
+import VueAWN from 'vue-awesome-notifications'
+require('vue-awesome-notifications/dist/styles/style.css')
+
+const SocketMutations = {
+  SOCKET_ONOPEN,
+  SOCKET_ONCLOSE,
+  SOCKET_ONERROR,
+  SOCKET_ONMESSAGE,
+  SOCKET_RECONNECT,
+  SOCKET_RECONNECT_ERROR
+}
 
 Vue.config.productionTip = false
 
+Vue.use(VueAWN)
 Vue.use(FishUI)
 Vue.use(Vuex)
 Vue.use(VueSidebarMenu)
 Vue.use(VueNativeSock, 'ws://localhost:5678', {
-  format: 'json'
+  format: 'json',
+  store: SocketStore,
+  mutations: SocketMutations
 })
 
 /* eslint-disable no-new */

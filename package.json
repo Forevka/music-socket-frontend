@@ -13,10 +13,13 @@
   "dependencies": {
     "@fortawesome/free-brands-svg-icons": "^5.10.0",
     "@fortawesome/free-regular-svg-icons": "^5.10.0",
+    "awesome-notifications": "^3.0.3",
     "fish-ui": "^1.1.74",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
+    "uri-js": "^4.2.2",
     "vue": "^2.5.2",
+    "vue-awesome-notifications": "^3.0.3",
     "vue-native-websocket": "^2.0.13",
     "vue-router": "^3.0.1",
     "vue-sidebar-menu": "^3.12.2",
