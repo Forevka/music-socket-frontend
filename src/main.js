@@ -20,6 +20,8 @@ import {
   SOCKET_RECONNECT_ERROR
 } from './stores/SocketMutationTypes'
 import VueAWN from 'vue-awesome-notifications'
+import VueMoment from 'vue-moment'
+import moment from 'moment-timezone'
 require('vue-awesome-notifications/dist/styles/style.css')
 
 const SocketMutations = {
@@ -37,6 +39,9 @@ Vue.use(VueAWN)
 Vue.use(FishUI)
 Vue.use(Vuex)
 Vue.use(VueSidebarMenu)
+Vue.use(VueMoment, {
+  moment
+})
 Vue.use(VueNativeSock, 'ws://localhost:5678', {
   format: 'json',
   store: SocketStore,

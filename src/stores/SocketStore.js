@@ -13,56 +13,54 @@ import {
 
 Vue.use(Vuex)
 
+const myPlugin = store => {
+  // called when the store is initialized
+  Vue.prototype.$socketStore = store
+}
+
 export default new Vuex.Store({
+  plugins: [myPlugin],
   state: {
     socket: {
       isConnected: false,
       message: '',
-      reconnectError: false,
-      role: '',
-      myId: 0,
-      channel: 0,
-      username: '',
-      password: ''
+      reconnectError: false
     }
   },
   mutations: {
     [SOCKET_ONOPEN] (state, event) {
       state.socket.isConnected = true
       console.log('connected', event)
-      state.socket.role = 'Guest'
-      if (localStorage.username && localStorage.password) {
-        Vue.prototype.$socket.sendObj({'event': 'Login', 'body': {'username': localStorage.username, 'password': localStorage.password}, 'timestamp': 1})
-      }
+      Vue.prototype.$mainApp.onOpen(state, event)
     },
     [SOCKET_ONCLOSE] (state, event) {
       state.socket.isConnected = false
-      console.log('closed connection')
+      console.log('closed connection on socket store')
+      Vue.prototype.$mainApp.onClose(state, event)
     },
     [SOCKET_ONERROR] (state, event) {
+      console.log('on error on socket store')
       console.error(state, event)
+      Vue.prototype.$mainApp.onError(state, event)
     },
     // default handler called for all methods
     [SOCKET_ONMESSAGE] (state, message) {
       state.socket.message = message
-      console.log('message', message)
+      console.log('message on socket store', message)
       if (message.event === 'Login') {
-        state.socket.role = message.body.role
-        state.socket.myId = message.body.user_id
-        state.socket.channel = message.body.channel
-        state.socket.username = message.body.user_name
-        state.socket.password = message.body.password
-        Vue.prototype.$awn.success('Logged as ' + state.socket.username)
+        Vue.prototype.$mainApp.onLogin(this, message)
       }
     },
     // mutations for reconnect methods
     [SOCKET_RECONNECT] (state, count) {
-      console.log('reconnect')
       console.info(state, count)
+      console.log('reconnect on socket store')
+      Vue.prototype.$mainApp.onReconnect(state, count)
     },
     [SOCKET_RECONNECT_ERROR] (state) {
       state.socket.reconnectError = true
-      console.log('reconnect error')
+      console.log('reconnect error on socket store')
+      Vue.prototype.$mainApp.onReconnectError(state)
     }
   }
 })
