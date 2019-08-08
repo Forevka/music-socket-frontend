@@ -12,6 +12,25 @@
 import Vue from 'vue'
 import SideMenu from './components/SideMenu'
 
+Vue.component('user-message-template', {
+  props: ['message', 'my_id'],
+  template: '<div class="user-message-wrapper" :data-user-id="message.user_id">' +
+  '<div class="user-image-wrapper">' +
+  '<div :style="{\'background-image\': \'url(\' + message.user_img + \')\'}"></div>' +
+  '</div>' +
+  '<div class="user-message-content">' +
+  '<div class="message-info">' +
+  '<span class="user-name">{{ message.user_name }} <span class="user-name-you">{{message.user_id === my_id ? "You" : ""}} </span></span>' +
+  '<span class="timestamp">{{ message.timestamp }}</span>' +
+  '</div>' +
+  '<div class="user-messages">' +
+  '<span v-for="(user_message, index) in message.user_messages">{{ user_message }}  </span>' +
+  '<span class="user-role" > {{ message.role === "admin" ? "Admin" : "" }} </span>' +
+  '</div>' +
+  '</div>' +
+  '</div>'
+})
+
 export default {
   name: 'App',
   components: {
@@ -73,12 +92,7 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+body {
+  background-color: rgb(29, 29, 29);
 }
 </style>
