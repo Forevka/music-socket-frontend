@@ -4,15 +4,34 @@
             <user-message-template v-for="message in chat_info.messages" v-bind:message="message" :my_id=current_user.user_id :key="message.id"></user-message-template>
         </div>
 
-        <div id="chat-message-field">
-            <div id="message-text" contenteditable @input="getCurrentMessage($event)" v-on:keydown="senMessageByEnter($event)" ref="messageField"></div>
-            <input id="send-message-button" type="button" v-on:click="sendMessage">
+        <div id="chat-message-field" ref="chatInput">
+            <div id="message-text" contenteditable @input="getCurrentMessage($event)" v-on:keydown="sendMessageByEnter($event)" ref="messageField"></div>
+            <input id="send-message-button" type="button" v-on:click="sendMyMessage">
         </div>
     </section>
 </template>
 
 <script>
 import Vue from 'vue'
+
+Vue.component('user-message-template', {
+  props: ['message', 'my_id'],
+  template: '<div class="user-message-wrapper" :data-user-id="message.user_id">' +
+  '<div class="user-image-wrapper">' +
+  '<div :style="{\'background-image\': \'url(\' + message.user_img + \')\'}"></div>' +
+  '</div>' +
+  '<div class="user-message-content">' +
+  '<div class="message-info">' +
+  '<span class="user-name">{{ message.user_name }} <span class="user-name-you">{{message.user_id === my_id ? "You" : ""}} </span></span>' +
+  '<span class="timestamp">{{ message.timestamp }}</span>' +
+  '</div>' +
+  '<div class="user-messages">' +
+  '<span v-for="(user_message, index) in message.user_messages">{{ user_message }}  </span>' +
+  '<span class="user-role" > {{ message.role === "admin" ? "Admin" : "" }} </span>' +
+  '</div>' +
+  '</div>' +
+  '</div>'
+})
 
 export default {
   name: 'ChatBox',
@@ -55,7 +74,20 @@ export default {
     }
   },
   methods: {
-    sendMessage: function () {
+    generateMessage: function () {
+      var date = new Date()
+
+      return {
+        user_id: this.current_user.user_id,
+        role: this.current_user.role,
+        user_name: this.current_user.user_name,
+        user_img: this.current_user.user_img,
+        timestamp: new Date().getHours() + ':' + (new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes()),
+        date: date,
+        user_messages: [this.current_user.user_messages]
+      }
+    },
+    sendMyMessage: function () {
       var TIME_INTERVAL = 1000
       var date = new Date()
 
@@ -77,7 +109,7 @@ export default {
 
       this.chat_info.messages.push({
         user_id: this.current_user.user_id,
-        role: 'admin',
+        role: this.current_user.role,
         user_name: this.current_user.user_name,
         user_img: this.current_user.user_img,
         timestamp: new Date().getHours() + ':' + (new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes()),
@@ -95,10 +127,43 @@ export default {
     getCurrentMessage: function (event) {
       this.current_user.user_messages = event.target.textContent
     },
-    senMessageByEnter: function (event) {
+    sendMessageByEnter: function (event) {
       if (event.keyCode !== 13) return
-      this.sendMessage()
+      this.sendMyMessage()
       event.preventDefault()
+    },
+    sendOtherMessage: function (message) {
+      var TIME_INTERVAL = 1000
+      var date = new Date()
+
+      if ((this.chat_info.messages[this.chat_info.messages.length - 1].user_id === this.current_user.user_id) &&
+        (date - this.chat_info.messages[this.chat_info.messages.length - 1].date) <= TIME_INTERVAL) {
+        this.chat_info.messages[this.chat_info.messages.length - 1].user_messages.push(this.current_user.user_messages)
+        this.current_user.user_messages = ''
+        Vue.nextTick(() => {
+          let messageDisplay = this.$refs.chatArea
+          messageDisplay.scrollTop = messageDisplay.scrollHeight
+          console.log(messageDisplay)
+        })
+        return
+      }
+
+      this.chat_info.messages.push({
+        user_id: message.user_id,
+        role: message.user_role,
+        user_name: this.current_user.user_name,
+        user_img: this.current_user.user_img,
+        timestamp: new Date().getHours() + ':' + (new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes()),
+        date: date,
+        user_messages: [this.current_user.user_messages]
+      })
+
+      this.current_user.user_messages = ''
+      Vue.nextTick(() => {
+        let messageDisplay = this.$refs.chatArea
+        messageDisplay.scrollTop = messageDisplay.scrollHeight
+        console.log(messageDisplay)
+      })
     }
   }
 }
