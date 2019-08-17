@@ -1,124 +1,103 @@
 <template>
-    <section id="chat-content" ref="chatArea">
-        <div id="messages-area">
-            <userMessageTemplate v-for="message in chat_info.messages" v-bind:message="message" :my_id=current_user.user_id :key="message.id"></userMessageTemplate>
-        </div>
-
-        <div id="chat-message-field" ref="chatInput">
-            <div id="message-text" contenteditable @input="getCurrentMessage($event)" v-on:keydown="sendMessageByEnter($event)" ref="messageField"></div>
-            <input id="send-message-button" type="button" v-on:click="sendMessage">
-        </div>
-    </section>
+  <div class="user-message-wrapper" :data-user-id="message.user_id" >
+    <div class="user-image-wrapper">
+      <div :style="{ backgroundImage: 'url(' +  message.user_img +')' }"> </div>
+    </div>
+    <div class="user-message-content">
+      <div class="message-info" >
+        <span class="user-name">{{ message.user_name }} <span class="user-name-you">{{message.user_id === my_id ? "You" : ""}} </span></span>
+        <span class="timestamp">{{ message.timestamp }} </span>
+      </div>
+      <div class="user-messages">
+        <span v-for="user_message in message.user_messages" :key=user_message>{{ user_message }}  </span>
+        <span class="user-role" > {{ message.role === "admin" ? "Admin" : "" }} </span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import Vue from 'vue'
-import userMessageTemplate from './userMessageTemplate'
-
 export default {
-  name: 'ChatBox',
-  components: {
-    userMessageTemplate
-  },
+  name: 'userMessageTemplate',
+  props: ['message', 'my_id'],
   data () {
     return {
-      message_text: '',
-      chat_info: {
-        name: 'Friends',
-        members: ['Paul', 'Stella', 'Nick', 'Alex', 'Natali', 'Diana', 'Kitty', 'Summer'],
-        messages: [{
-          user_id: 1,
-          role: 'member',
-          user_name: 'Paul',
-          user_img: 'https://res.cloudinary.com/natalik/image/upload/v1537764121/images/The-Fall.jpg',
-          timestamp: '13:40',
-          date: 1537771200000,
-          user_messages: [
-            'Hello Stella.', 'How are you!?'
-          ]
-
-        }, {
-          user_id: 2,
-          role: 'member',
-          user_name: 'Stella',
-          user_img: 'https://res.cloudinary.com/natalik/image/upload/v1537764116/images/gillian-anderson.jpg',
-          timestamp: '13:46',
-          date: 1537771560000,
-          user_messages: [
-            'Hi...Paul', 'Fine. Where are you?'
-          ]
-        }]
-      }
-    }
-  },
-  methods: {
-    generateMessage: function () {
-      var date = new Date()
-      var u = this.current_user
-
-      this.$refs.messageField.innerHTML = ''
-      return {
-        user_id: u.user_id,
-        role: u.role,
-        user_name: u.user_name,
-        user_img: u.user_img,
-        timestamp: new Date().getHours() + ':' + (new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes()),
-        date: date,
-        user_message: this.message_text
-      }
-    },
-    sendMessage: function () {
-      let msg = this.generateMessage()
-      Vue.prototype.$mainApp.sendRequest('ChatMessage', msg)
-      /* var TIME_INTERVAL = 1000
-      var date = new Date()
-
-      if (!this.current_user.user_messages) return
-
-      this.$refs.messageField.innerHTML = ''
-
-      if ((this.chat_info.messages[this.chat_info.messages.length - 1].user_id === this.current_user.user_id) &&
-        (date - this.chat_info.messages[this.chat_info.messages.length - 1].date) <= TIME_INTERVAL) {
-        this.chat_info.messages[this.chat_info.messages.length - 1].user_messages.push(this.current_user.user_messages)
-        this.current_user.user_messages = ''
-        Vue.nextTick(() => {
-          let messageDisplay = this.$refs.chatArea
-          messageDisplay.scrollTop = messageDisplay.scrollHeight
-        })
-        return
-      }
-
-      this.chat_info.messages.push({
-        user_id: this.current_user.user_id,
-        role: this.current_user.role,
-        user_name: this.current_user.user_name,
-        user_img: this.current_user.user_img,
-        timestamp: new Date().getHours() + ':' + (new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes()),
-        date: date,
-        user_messages: [this.current_user.user_messages]
-      })
-
-      this.current_user.user_messages = ''
-      Vue.nextTick(() => {
-        let messageDisplay = this.$refs.chatArea
-        messageDisplay.scrollTop = messageDisplay.scrollHeight
-        console.log(messageDisplay)
-      }) */
-    },
-    getCurrentMessage: function (event) {
-      this.message_text = event.target.textContent
-    },
-    sendMessageByEnter: function (event) {
-      if (event.keyCode !== 13) return
-      this.sendMessage()
-      event.preventDefault()
+      a: 1
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+/* Begin reset styles */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+    font-family: 'Verdana', sans-serif;
+    font-weight: 300;
+    overflow-y: scroll;
+}
+blockquote,
+q {
+    quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: "";
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+a {
+    text-decoration: none;
+}
+a:active,
+a:hover,
+*:focus {
+    outline: 0;
+}
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+    -webkit-appearance: button;
+    cursor: pointer;
+}
+html,
+body {
+    height: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+}
+/* End reset styles */
 #navigation-button,
 #navigation-menu > input {
     display: none;
@@ -128,7 +107,6 @@ export default {
     min-height: 100%;
     height: 100%;
     width: 100%;
-    padding-left: 4%;
 }
 #chat-content,
 #chat-header,
@@ -145,18 +123,12 @@ export default {
 }
 #chat-content {
     position: relative;
-    top: 200px;
-    left: 20%;
-    background: #19222d;
-    height: 60vh;
-    padding: 1em;
-    overflow: auto;
-    width: 40%;
-    box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.3)
 }
 #chat-header {
-    position: inherit;
+    position: fixed;
     height: 50px;
+    width: 100%;
+    top: 0;
     padding: 0 10px 0 20px;
     box-sizing: border-box;
     border-bottom: 1px solid #5e6e80;
@@ -314,25 +286,23 @@ export default {
     opacity: .6;
 }
 #messages-area {
-    min-height: 91%;
-    width: 98%;
-    padding: 2% 2%;
+    min-height: 100%;
+    width: 100%;
+    padding: 70px 20px;
     box-sizing: border-box;
     overflow-x: hidden;
     overflow-y: auto;
 }
 #messages-area:empty {
     background-image: url(https://res.cloudinary.com/natalik/image/upload/v1537763869/images/empty_chat.png.jpg);
-    background-position: center;
+        background-position: center;
     background-repeat: no-repeat;
 }
-
 #chat-message-field {
-    position: relative;
-    left: 2%;
-    bottom: 0;
+    position: fixed;
     min-height: 50px;
-    width: 96%;
+    width: 100%;
+    bottom: 0;
     padding: 10px 20px;
     box-sizing: border-box;
     border-top: 1px solid #5e6e80;
@@ -358,7 +328,7 @@ export default {
     border: none;
     font-size: 13px;
     line-height: 18px;
-    color: rgb(202, 26, 26);
+    color: #fff;
     white-space: normal;
     vertical-align: middle;
     overflow-y: auto;
@@ -393,5 +363,82 @@ export default {
 }
 #send-message-button:hover {
     opacity: .8;
+}
+.user-message-wrapper {
+    font-size: 0;
+    border: 1px solid rgba(104, 102, 102, 0.671);
+    border-radius: 5px;
+}
+.user-message-wrapper:not(:first-child) {
+    margin: 10px 0 0;
+}
+.user-image-wrapper {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.user-image-wrapper > div {
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.user-message-wrapper > div {
+    display: inline-block;
+}
+.user-message-content {
+    position: relative;
+    width: calc(100% - 50px);
+    bottom: 8px;
+    padding: 5px 0 0 10px;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+.message-info > span {
+    display: inline-block;
+    color: #fff;
+}
+.user-name {
+    width: 70%;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: left;
+}
+.user-name-you {
+    opacity: 0.2;
+    position: inherit;
+    width: 80%;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: left;
+}
+.timestamp {
+    position: relative;
+    width: 30%;
+    font-size: 11px;
+    text-align: right;
+    opacity: .5;
+}
+.user-role {
+    width: 100%;
+    position: relative;
+    top: -15px;
+    font-size: small;
+    text-align: right;
+    opacity: .5;
+}
+.user-messages,
+.user-messages > span:not(:first-child) {
+    margin: 5px 0 0;
+}
+.user-messages > span {
+    position: relative;
+    top: 10px;
+    display: block;
+    font-size: 14px;
+    color: #fff;
+    white-space: normal;
+    word-break: break-all;
 }
 </style>
