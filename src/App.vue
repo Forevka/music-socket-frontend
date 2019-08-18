@@ -11,6 +11,7 @@
 <script>
 import Vue from 'vue'
 import SideMenu from './components/SideMenu'
+import HTTP from './components/HTTPApi'
 
 export default {
   name: 'App',
@@ -24,7 +25,7 @@ export default {
         user_img: 'https://res.cloudinary.com/natalik/image/upload/v1537842919/images/Nick_Fury.png',
         password: '',
         socketStore: null,
-        role: 'guest',
+        role: 'Guest',
         user_id: 0,
         channel: 0
       },
@@ -39,12 +40,24 @@ export default {
   },
   mounted () {
     Vue.prototype.$mainApp = this
+    // this.loginHttp('volodia', '0010000')
     if (localStorage.user_name && localStorage.password) {
       this.current_user.user_name = localStorage.user_name
       this.current_user.password = localStorage.password
     }
   },
   methods: {
+    loginHttp: function (login, password) {
+      HTTP.post('/authentication', {
+        login: login,
+        password: password
+      })
+        .then(response => {
+          localStorage.token = response.data.token
+          this.$awn.success('Logged')
+        })
+        .catch(error => (this.$awn.alert('Cant login' + error)))
+    },
     isThisChannelExist: function (channelId) {
       let chId = channelId
       return this.available_channels.filter(function (u) {

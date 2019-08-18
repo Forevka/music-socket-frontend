@@ -112,6 +112,9 @@ export default {
     let thisChannel = this.$parent.isThisChannelExist(Number(this.$route.params.id))
     if (thisChannel.length === 1) {
       this.channel = thisChannel[0]
+      if (this.$parent.current_user.role === 'Guest') {
+        console.log('not logged')
+      }
     } else {
       this.$router.replace({ name: 'ChannelDoesntExist' })
     }
