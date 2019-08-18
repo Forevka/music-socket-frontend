@@ -21,13 +21,12 @@ export default {
   data () {
     return {
       current_user: {
-        user_name: '',
-        user_img: 'https://res.cloudinary.com/natalik/image/upload/v1537842919/images/Nick_Fury.png',
+        avatar: 'https://ui-avatars.com/api/?name=Unnamed&size=128&background=b0a0a1',
+        username: '',
         password: '',
         socketStore: null,
         role: 'Guest',
-        user_id: 0,
-        channel: 0
+        userid: -1
       },
       available_channels: [
         {
@@ -37,6 +36,9 @@ export default {
         }
       ]
     }
+  },
+  created () {
+    Vue.prototype.$mainApp = this
   },
   mounted () {
     Vue.prototype.$mainApp = this

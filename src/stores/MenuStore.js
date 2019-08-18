@@ -4,7 +4,18 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const state = {
-  menu: [
+  menuUnLogged: [
+    {
+      header: true,
+      title: 'Menu'
+    },
+    {
+      href: '/',
+      title: 'Login',
+      icon: 'fa fa-user'
+    }
+  ],
+  menuLogged: [
     {
       header: true,
       title: 'Menu'
@@ -15,18 +26,9 @@ const state = {
       icon: 'fa fa-user'
     },
     {
-      title: 'Channels',
-      icon: 'fa fa-bullhorn',
-      child: [
-        {
-          href: '/channels',
-          title: 'All Channels'
-        },
-        {
-          href: '/channels/my',
-          title: 'My Channels'
-        }
-      ]
+      href: '/',
+      title: 'Channel',
+      icon: 'fa fa-bullhorn'
     }
   ]
 }
@@ -48,7 +50,11 @@ const actions = {
 
 const getters = {
   getMenu (state) {
-    return state.menu
+    if (Vue.prototype.$mainApp.current_user.userid === -1) {
+      return state.menuUnLogged
+    } else {
+      return state.MenuLogged
+    }
   }
 }
 

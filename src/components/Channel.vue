@@ -33,13 +33,20 @@
           <div class="post__content">
             <div class="post__name" v-on:click="mentionUser(post.username)">{{ post.username }}</div>
             <div class="post__timestamp">{{ post.timestamp }}</div>
-            <div class="post__is_you">{{ post.userid === current_user.userid ? 'You' : ''}}</div>
+            <div class="post__is_you">{{ post.userid === currentUser.userid ? 'You' : ''}}</div>
             <div class="post__message">{{ post.text }}</div>
           </div>
         </div>
       </div>
-      <div class="chat__input">
-        <div class="input__container"><input class="input__message" type="text" placeholder="Enter message" v-model="post" @keyup.enter="createPost" ref="inputPost"/></div>
+      <div class="chat__input" v-if="currentUser.userid != -1">
+        <div class="input__container">
+          <input class="input__message" type="text" placeholder="Enter message" v-model="post" @keyup.enter="createPost" ref="inputPost"/>
+        </div>
+      </div>
+      <div class="chat__input" v-else>
+        <div class="input__container">
+          <input disabled class="input__message" type="text" placeholder="Need to login" v-model="post" @keyup.enter="createPost" ref="inputPost"/>
+        </div>
       </div>
     </div>
   </div>
@@ -100,12 +107,7 @@ export default {
         status: 3
       }
       ],
-      posts: [],
-      current_user: {
-        username: 'Forevka',
-        avatar: 'https://ui-avatars.com/api/?name=Forevka&size=128&background=b0a0a1',
-        userid: 1
-      }
+      posts: []
     }
   },
   created () {
@@ -173,9 +175,9 @@ export default {
     generatePost: function (text) {
       return {
         text: text,
-        username: this.current_user.username,
-        avatar: this.current_user.avatar,
-        userid: this.current_user.userid,
+        username: this.currentUser.username,
+        avatar: this.currentUser.avatar,
+        userid: this.currentUser.userid,
         timestamp: moment().unix()
       }
     }
@@ -183,6 +185,9 @@ export default {
   computed: {
     timestamp () {
       return moment().format('h:mm')
+    },
+    currentUser: function () {
+      return this.$parent.current_user
     }
   }
 }

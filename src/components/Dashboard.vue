@@ -1,19 +1,18 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <fish-form style="width: 300px; display: inline-block;">
-      <fish-field label="Username">
-        <fish-input v-model="username"></fish-input>
-      </fish-field>
-      <fish-field label="Password">
-        <fish-input v-model="password"></fish-input>
-      </fish-field>
-      <fish-field>
-        <fish-checkbox index="yes">Remember me?</fish-checkbox>
-      </fish-field>
-      <fish-button type="primary" v-on:click="login">Submit</fish-button>
-      <fish-button type="primary" v-on:click="change_menu">Change Menu</fish-button>
-    </fish-form>
+  <div class="login__container" v-bind:style="{'line-height': '1.4285em'}">
+    <h1 align="center">{{ msg }}</h1>
+    <div style="width: 300px; display: inline-block;">
+      <b-field label="Username">
+        <b-input v-model="username"></b-input>
+      </b-field>
+      <b-field label="Password">
+        <b-input v-model="password"></b-input>
+      </b-field>
+      <b-field>
+        <b-checkbox>Remember me?</b-checkbox>
+        <b-button type="is-primary" v-on:click="login" style="position: absolute; right: 0;">Submit</b-button>
+      </b-field>
+    </div>
   </div>
 </template>
 
@@ -22,7 +21,7 @@ export default {
   name: 'Dashboard',
   data () {
     return {
-      msg: 'Login to Websocket server',
+      msg: 'Login',
       username: '',
       password: ''
     }
@@ -45,7 +44,14 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
+@mixin centerer {
+  position: absolute;
+  top: 50%;
+  left: calc(50% + 50px);
+  transform: translate(-50%, -50%);
+}
+
 h1, h2 {
   font-weight: normal;
 }
@@ -59,5 +65,13 @@ li {
 }
 a {
   color: #42b983;
+}
+
+.login__container {
+  @include centerer;
+}
+
+body {
+  background-color: rgb(54, 56, 62);
 }
 </style>
