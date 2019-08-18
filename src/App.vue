@@ -45,6 +45,12 @@ export default {
     }
   },
   methods: {
+    isThisChannelExist: function (channelId) {
+      let chId = channelId
+      return this.available_channels.filter(function (u) {
+        return u.id === chId
+      })
+    },
     sendRequest: function (event, body = {}) {
       return Vue.prototype.$socket.sendObj({'event': event, 'body': body, 'timestamp': this.$moment().unix()})
     },

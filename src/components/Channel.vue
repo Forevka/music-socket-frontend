@@ -108,6 +108,14 @@ export default {
       }
     }
   },
+  created () {
+    let thisChannel = this.$parent.isThisChannelExist(Number(this.$route.params.id))
+    if (thisChannel.length === 1) {
+      this.channel = thisChannel[0]
+    } else {
+      this.$router.replace({ name: 'ChannelDoesntExist' })
+    }
+  },
   mounted () {
     let toInsert = [{
       text: 'asd',
@@ -136,8 +144,6 @@ export default {
   },
   methods: {
     getUsersStatusList: function (userList, status) {
-      console.log(userList)
-      console.log(status)
       let needStatus = status
       let s = this.searchQuery.replace(/ /g, '')
       return userList.filter(function (u) {
@@ -174,24 +180,6 @@ export default {
   computed: {
     timestamp () {
       return moment().format('h:mm')
-    },
-    onlineUsers: function () {
-      let s = this.searchQuery.replace(/ /g, '')
-      return this.users.filter(function (u) {
-        return u.status === 1 && u.username.replace(/ /g, '').toLowerCase().indexOf(s.toLowerCase()) !== -1
-      })
-    },
-    offlineUsers: function () {
-      let s = this.searchQuery.replace(/ /g, '')
-      return this.users.filter(function (u) {
-        return u.status === 2 && u.username.replace(/ /g, '').toLowerCase().indexOf(s.toLowerCase()) !== -1
-      })
-    },
-    dontDisturbUsers: function () {
-      let s = this.searchQuery.replace(/ /g, '')
-      return this.users.filter(function (u) {
-        return u.status === 3 && u.username.replace(/ /g, '').toLowerCase().indexOf(s.toLowerCase()) !== -1
-      })
     }
   }
 }
@@ -407,6 +395,7 @@ input {
   color: #bfc3c3;
   display: inline;
   &:hover {
+    cursor: pointer;
     text-decoration: underline;
   }
 }
@@ -517,6 +506,7 @@ input {
 
 .main__friends .user__name:hover {
   color: $color-white;
+  cursor: pointer;
 }
 
 /* Repeats */
