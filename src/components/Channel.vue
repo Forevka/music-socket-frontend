@@ -11,8 +11,10 @@
       <div class="main__friends">
         <div class="friend__category" v-for="(category, index) in availabeCategories" :key='index'>{{ category.name }}
           <div class="friend__status" v-for="user in getUsersStatusList(users, category.status)" :key="user.userid">
+            <!--<avatar :username=user.username :src=user.avatar></avatar>-->
             <div class="friend__avatar" v-bind:style="{'background': 'url('+user.avatar+')', 'border-radius': '50%', 'min-height': '2rem', 'min-width': '2rem', 'background-position': 'center', 'background-size': '100% 100%'}">
               <div class="avatar__status"  v-bind:style="{'background': category.color, 'border-radius': '50%', 'min-height': '0.8rem', 'min-width': '0.8rem'}"></div>
+              <!--<status-indicator class="avatar__status" status="active" pulse/>-->
             </div>
             <div class="friend__user">
               <div class="user__name" v-on:click="mentionUser(user.username)">{{ user.username }}</div>
@@ -55,8 +57,16 @@
 
 <script>
 import moment from 'moment'
+import { StatusIndicator } from 'vue-status-indicator'
+import Avatar from 'vue-avatar'
+import VueEmoji from 'emoji-vue'
 
 export default {
+  components: {
+    StatusIndicator,
+    Avatar,
+    VueEmoji
+  },
   data () {
     return {
       active: false,

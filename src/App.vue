@@ -42,7 +42,7 @@ export default {
   },
   mounted () {
     Vue.prototype.$mainApp = this
-    // this.loginHttp('volodia', '0010000')
+    // this.loginHttp('volodia', '000000')
     if (localStorage.user_name && localStorage.password) {
       this.current_user.user_name = localStorage.user_name
       this.current_user.password = localStorage.password

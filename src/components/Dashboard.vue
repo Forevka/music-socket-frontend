@@ -10,7 +10,7 @@
       </b-field>
       <b-field>
         <b-checkbox>Remember me?</b-checkbox>
-        <b-button type="is-primary" v-on:click="login" style="position: absolute; right: 0;">Submit</b-button>
+        <b-button type="is-primary" v-on:click="loginHttp" style="position: absolute; right: 0;">Submit</b-button>
       </b-field>
     </div>
   </div>
@@ -27,6 +27,9 @@ export default {
     }
   },
   methods: {
+    loginHttp: function () {
+      this.$parent.loginHttp(this.username, this.password)
+    },
     login: function () {
       let a = this.create_request('Login', {username: this.username, password: this.password})
       console.log(a)
