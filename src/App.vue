@@ -50,15 +50,13 @@ export default {
   },
   methods: {
     loginHttp: function (login, password) {
-      HTTP.post('/authentication', {
-        login: login,
-        password: password
-      })
-        .then(response => {
-          localStorage.token = response.data.token
-          this.$awn.success('Logged')
-        })
-        .catch(error => (this.$awn.alert('Cant login' + error)))
+      let token = HTTP.Instance().login(login, password)
+      if (token !== '') {
+        localStorage.token = token
+        this.$awn.success('Login successfull')
+      } else {
+        this.$awn.alert('Error on login')
+      }
     },
     isThisChannelExist: function (channelId) {
       let chId = channelId

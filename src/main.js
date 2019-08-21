@@ -9,8 +9,8 @@ import FishUI from 'fish-ui'
 
 import VueSidebarMenu from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
-import MenuStore from './stores/MenuStore'
-import SocketStore from './stores/SocketStore'
+import MenuStore from './stores/modules/MenuStore'
+import store from './stores/index'
 import {
   SOCKET_ONOPEN,
   SOCKET_ONCLOSE,
@@ -18,7 +18,7 @@ import {
   SOCKET_ONMESSAGE,
   SOCKET_RECONNECT,
   SOCKET_RECONNECT_ERROR
-} from './stores/SocketMutationTypes'
+} from './stores/modules/SocketMutationTypes'
 import VueAWN from 'vue-awesome-notifications'
 import VueMoment from 'vue-moment'
 import moment from 'moment-timezone'
@@ -48,7 +48,7 @@ Vue.use(VueMoment, {
 })
 Vue.use(VueNativeSock, 'ws://localhost:5678', {
   format: 'json',
-  store: SocketStore,
+  store: store,
   mutations: SocketMutations
 })
 

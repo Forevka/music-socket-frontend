@@ -1,8 +1,3 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-
-Vue.use(Vuex)
-
 const state = {
   menuUnLogged: [
     {
@@ -49,18 +44,18 @@ const actions = {
 }
 
 const getters = {
-  getMenu (state) {
-    if (Vue.prototype.$mainApp.current_user.userid === -1) {
-      return state.menuUnLogged
+  getMenu (context, state) {
+    if (state.getUser.userid === -1) {
+      return context.menuUnLogged
     } else {
-      return state.MenuLogged
+      return context.menuLogged
     }
   }
 }
 
-export default new Vuex.Store({
+export default {
   state,
   mutations,
   actions,
   getters
-})
+}

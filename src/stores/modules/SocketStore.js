@@ -18,7 +18,7 @@ const myPlugin = store => {
   Vue.prototype.$socketStore = store
 }
 
-export default new Vuex.Store({
+export default {
   plugins: [myPlugin],
   state: {
     socket: {
@@ -63,4 +63,4 @@ export default new Vuex.Store({
       Vue.prototype.$mainApp.onReconnectError(state)
     }
   }
-})
+}

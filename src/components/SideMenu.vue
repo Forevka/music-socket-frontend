@@ -7,11 +7,14 @@
 </template>
 
 <script>
+import store from '../stores/index'
+
 export default {
   name: 'SideMenu',
   computed: {
     menu () {
-      return this.$store.MenuStore.getters.getMenu
+      console.log(store)
+      return store.getters.getMenu
     },
     collapsed () {
       return true
