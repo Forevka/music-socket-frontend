@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import HTTP from './HTTPApi'
+
 export default {
   name: 'Dashboard',
   data () {
@@ -28,7 +30,7 @@ export default {
   },
   methods: {
     loginHttp: function () {
-      this.$parent.loginHttp(this.username, this.password)
+      HTTP.Instance().login(this.username, this.password)
     },
     login: function () {
       let a = this.create_request('Login', {username: this.username, password: this.password})
@@ -37,10 +39,6 @@ export default {
     },
     create_request: function (event, body = '') {
       return {event: event, body: body, timestamp: '1'}
-    },
-    change_menu: function () {
-      console.log('changing menu')
-      this.$store.MenuStore.dispatch('changeMenu')
     }
   }
 }

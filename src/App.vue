@@ -11,7 +11,6 @@
 <script>
 import Vue from 'vue'
 import SideMenu from './components/SideMenu'
-import HTTP from './components/HTTPApi'
 
 export default {
   name: 'App',
@@ -49,15 +48,6 @@ export default {
     }
   },
   methods: {
-    loginHttp: function (login, password) {
-      let token = HTTP.Instance().login(login, password)
-      if (token !== '') {
-        localStorage.token = token
-        this.$awn.success('Login successfull')
-      } else {
-        this.$awn.alert('Error on login')
-      }
-    },
     isThisChannelExist: function (channelId) {
       let chId = channelId
       return this.available_channels.filter(function (u) {

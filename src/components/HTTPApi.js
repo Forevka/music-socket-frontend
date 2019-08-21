@@ -1,6 +1,8 @@
 import axios from 'axios'
 import store from '../stores/index'
 
+import Vue from 'vue'
+
 class HTTP {
   _instance = null
 
@@ -29,19 +31,16 @@ class HTTP {
       password: password
     })
       .then(response => {
-        if (response.status === 200) {
-          store.dispatch('change_user', {
-            userid: 0,
-            username: login,
-            password: password,
-            role: 'Member',
-            token: response.data.token
-          })
-        } else if (response.status === 401) {
-
-        }
+        store.dispatch('change_user', {
+          userid: 0,
+          username: login,
+          password: password,
+          role: 'Member',
+          token: response.data.token
+        })
+        Vue.prototype.$awn.success('Successfully loged')
       })
-      .catch(() => { })
+      .catch(error => { Vue.prototype.$awn.alert('Cant login ' + error) })
   }
 }
 
