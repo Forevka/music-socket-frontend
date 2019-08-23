@@ -47,7 +47,7 @@
       </div>
       <div class="chat__input" v-else>
         <div class="input__container">
-          <input disabled class="input__message" type="text" placeholder="Need to login" v-model="post" @keyup.enter="createPost" ref="inputPost"/>
+          <input class="input__message" type="text" placeholder="Need to login" v-model="post" @keyup.enter="createPost" ref="inputPost"/>
         </div>
       </div>
     </div>
@@ -208,8 +208,8 @@ export default {
 
 $background-nav: rgb(32, 34, 36);
 $background-header: rgb(40, 42, 46);
-$background-header-chat: rgb(46, 48, 54);
-$background-main: rgb(54, 56, 62);
+$background-header-chat: #2f3136;
+$background-main: #222;
 $color-black: rgb(26, 26, 26);
 $color-blue: rgb(114, 136, 218);
 $color-green: rgb(68, 182, 130);
@@ -393,8 +393,10 @@ input {
   &__post {
     @include flex(null, flex-start, null);
     position: relative;
+    padding: 10px 10px;
+    background: #323232;
     &:not(:last-child) {
-      margin-bottom: 2rem;
+      margin-bottom: 0.5rem;
     }
   }
   &__input {
@@ -410,7 +412,9 @@ input {
 }
 
 .post__name {
-  color: #bfc3c3;
+  position: relative;
+  bottom: 8px;
+  color: skyblue;
   display: inline;
   &:hover {
     cursor: pointer;
@@ -419,6 +423,8 @@ input {
 }
 
 .post__timestamp {
+  position: relative;
+  bottom: 8px;
   color: rgba($color-white, 0.25);
   display: inline;
   font-size: 0.75rem;
@@ -428,7 +434,7 @@ input {
   color: rgba($color-white, 0.25);
   position: absolute; /* блок занимает ширину содержимого, max-width её ограничивает */
   top: 0.3em; /* прикрепить к верху родителя */
-  right: 0px;
+  right: 0.5em;
   display: inline-block;
   font-size: 0.75rem;
 }
@@ -504,11 +510,13 @@ input {
 
 .friend__status {
   @include flex(null, center, null);
+  padding: 5px;
   &:first-child {
-    margin-top: 0.5rem;
+    margin-top: 0.3rem;
   }
-  &:not(:last-child) {
-    margin-bottom: 1rem;
+  &:hover {
+    background: #222;
+    border-radius: 10px;
   }
 }
 
