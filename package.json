@@ -25,6 +25,7 @@
     "node-sass": "^4.12.0",
     "sass-loader": "^7.2.0",
     "uri-js": "^4.2.2",
+    "v-animate-css": "0.0.3",
     "vue": "^2.5.2",
     "vue-avatar": "^2.1.7",
     "vue-awesome-notifications": "^3.0.3",

@@ -21,7 +21,7 @@ const state = {
       icon: 'fa fa-user'
     },
     {
-      href: '/',
+      href: '/channel/0',
       title: 'Channel',
       icon: 'fa fa-bullhorn'
     }

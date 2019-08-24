@@ -35,12 +35,17 @@ class HTTP {
           userid: 0,
           username: login,
           password: password,
+          avatar: 'https://avatars0.githubusercontent.com/u/32968153',
           role: 'Member',
           token: response.data.token
         })
         Vue.prototype.$awn.success('Successfully loged')
       })
-      .catch(error => { Vue.prototype.$awn.alert('Cant login ' + error) })
+      .catch(error => { Vue.prototype.$awn.alert(this.parseError(error)) })
+  }
+
+  parseError (error) {
+    return error.response.data.message
   }
 }
 

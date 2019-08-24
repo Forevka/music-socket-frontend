@@ -24,6 +24,7 @@ import VueMoment from 'vue-moment'
 import moment from 'moment-timezone'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
+import VAnimateCss from 'v-animate-css'
 
 require('vue-awesome-notifications/dist/styles/style.css')
 
@@ -38,6 +39,7 @@ const SocketMutations = {
 
 Vue.config.productionTip = false
 
+Vue.use(VAnimateCss)
 Vue.use(Buefy)
 Vue.use(VueAWN)
 Vue.use(FishUI)

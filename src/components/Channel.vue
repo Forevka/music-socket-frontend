@@ -30,7 +30,7 @@
         <div class="header__title">{{ channel.name }}</div>
       </div>
       <div class="chat__chat" ref="chat">
-        <div class="chat__post" v-for="(post, index) in posts" :key='index'>
+        <div class="chat__post" v-for="(post, index) in posts" :key='index' v-animate-css="'fadeIn'">
           <div class="post__avatar" v-bind:style="{'background-image': 'url('+post.avatar+')'}"></div>
           <div class="post__content">
             <div class="post__name" v-on:click="mentionUser(post.username)">{{ post.username }}</div>
@@ -40,14 +40,14 @@
           </div>
         </div>
       </div>
-      <div class="chat__input" v-if="currentUser.userid != -1">
+      <div class="chat__input" v-if="isLoged">
         <div class="input__container">
           <input class="input__message" type="text" placeholder="Enter message" v-model="post" @keyup.enter="createPost" ref="inputPost"/>
         </div>
       </div>
       <div class="chat__input" v-else>
         <div class="input__container">
-          <input class="input__message" type="text" placeholder="Need to login" v-model="post" @keyup.enter="createPost" ref="inputPost"/>
+          <input disabled class="input__message" type="text" placeholder="Need to login" v-model="post" @keyup.enter="createPost" ref="inputPost"/>
         </div>
       </div>
     </div>
@@ -60,6 +60,7 @@ import moment from 'moment'
 import { StatusIndicator } from 'vue-status-indicator'
 import Avatar from 'vue-avatar'
 import VueEmoji from 'emoji-vue'
+import store from '../stores/index'
 
 export default {
   components: {
@@ -145,8 +146,7 @@ export default {
       avatar: 'https://ui-avatars.com/api/?name=volodia',
       userid: 2,
       timestamp: '1565968319'
-    }
-    ]
+    }]
     for (let i = 0; i < toInsert.length; i++) {
       this.insertPost(toInsert[i])
     }
@@ -193,11 +193,14 @@ export default {
     }
   },
   computed: {
+    isLoged () {
+      return store.getters.getUser.role !== 'Guest'
+    },
     timestamp () {
       return moment().format('h:mm')
     },
     currentUser: function () {
-      return this.$parent.current_user
+      return store.getters.getUser
     }
   }
 }
