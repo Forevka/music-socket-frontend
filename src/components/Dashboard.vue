@@ -19,9 +19,6 @@ export default {
     }
   },
   methods: {
-    loginHttp: function () {
-      HTTP.Instance().login(this.username, this.password)
-    },
     login: function () {
       let a = this.create_request('Login', {username: this.username, password: this.password})
       console.log(a)

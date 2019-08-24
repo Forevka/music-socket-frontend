@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <SideMenu/>
-    <router-view/>
+    <transition name="fade">
+      <router-view/>
+    </transition>
   </div>
 </template>
 
