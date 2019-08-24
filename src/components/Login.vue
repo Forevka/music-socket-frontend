@@ -16,10 +16,10 @@
           <section>
             <label>
               <p>Email</p>
-              <input type="email" placeholder=" " v-model="resetEmail"/>
+              <input placeholder=" " v-model="resetEmail"/>
               <div class="border"></div>
             </label>
-            <button v-on:click="rememberPassword">Send email</button>
+            <button :disabled=forgotFormValid type="button" v-on:click="rememberPassword">Send email</button>
           </section>
           <footer>
             <button type="button" class="forgotBtn" v-on:click="activeForgot()" >Back</button>
@@ -35,7 +35,7 @@
           <section>
             <label>
               <p>Username</p>
-              <input type="text" v-model="username" placeholder=" " />
+              <input v-model="username" placeholder=" " />
               <div class="border"></div>
             </label>
             <label>
@@ -43,7 +43,7 @@
               <input type="password" v-model="password" placeholder=" " />
               <div class="border"></div>
             </label>
-            <button v-on:click="loginHttp">Login</button>
+            <button :disabled=loginFormValid type="button" v-on:click="loginHttp">Login</button>
           </section>
           <footer>
             <button type="button" class="forgotBtn" v-on:click="activeForgot()">Forgot password?</button>
@@ -54,31 +54,31 @@
         <!-- Register form -->
         <form id="register" v-bind:class=registerClass>
           <header>
-            <h1>Forgot Password</h1>
+            <h1>Create new user</h1>
             <p>Register to gain full access</p>
           </header>
           <section>
             <label>
               <p>Username</p>
-              <input type="text" placeholder=" " v-model="registerUsername"/>
+              <input placeholder=" " v-model="registerUsername" required/>
               <div class="border"></div>
             </label>
             <label>
               <p>Email</p>
-              <input type="email" placeholder=" " v-model="registerEmail"/>
+              <input placeholder=" " v-model="registerEmail" required/>
               <div class="border"></div>
             </label>
             <label>
               <p>Password</p>
-              <input type="password" placeholder=" " v-model="registerPassword"/>
+              <input type="password" placeholder=" " v-model="registerPassword" required/>
               <div class="border"></div>
             </label>
             <label>
               <p>Repeat Password</p>
-              <input type="password" placeholder=" " v-model="registerPasswordRepeat"/>
+              <input type="password" placeholder=" " v-model="registerPasswordRepeat" required/>
               <div class="border"></div>
             </label>
-            <button v-on:click="registerUser">Send email</button>
+            <button :disabled=registerFormValid type="button" v-on:click="registerUser">Send email</button>
           </section>
           <footer>
             <button type="button" class="registerBtn" v-on:click="activeRegister()">Back</button>
@@ -141,6 +141,30 @@ export default {
     },
     registerUser: function () {
       this.$awn.success('register ' + this.registerUsername + ' ' + this.registerEmail + ' ' + this.registerPassword)
+    },
+    validateEmail: function (email) {
+      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      return re.test(String(email).toLowerCase())
+    }
+  },
+  computed: {
+    loginFormValid () {
+      return !(this.username !== '' && this.password !== '')
+    },
+    registerFormValid () {
+      if (this.registerEmail === '' ||
+        this.registerUsername === '' ||
+        this.registerPassword === '' ||
+        this.registerPasswordRepeat === '') {
+        return true
+      }
+      if (this.registerPassword !== this.registerPasswordRepeat) {
+        return true
+      }
+      return !this.validateEmail(this.registerEmail)
+    },
+    forgotFormValid () {
+      return !this.validateEmail(this.resetEmail)
     }
   }
 }
@@ -309,8 +333,13 @@ body {
         color: #fff;
         cursor: pointer;
 
-        &:hover {
+        &:active:hover {
           background: darken($main, 2%);
+        }
+
+        &:disabled {
+          opacity: 0.65;
+          cursor: not-allowed;
         }
       }
     }
@@ -344,7 +373,6 @@ body {
       position: absolute;
       background: url($image-forgot);
       background-position: center;
-      background-size: 100% 100%;
       height: 100%;
       z-index: 1;
       display: flex;
@@ -354,7 +382,7 @@ body {
       padding: 25px 0;
       transition: 0.2s ease;
       transition-delay: .2s;
-      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      border-left: 0px solid rgba(0, 0, 0, 0.1);
 
       header {
         color: #fff;
