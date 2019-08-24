@@ -1,18 +1,18 @@
 <template>
   <div v-if="!isLoged" class="login__container" v-bind:style="{'line-height': '1.4285em'}">
-    <LoginRegisterRemember> </LoginRegisterRemember>
+    <LoginForm> </LoginForm>
   </div>
 </template>
 
 <script>
 import HTTP from './HTTPApi'
 import store from '../stores/index'
-import LoginRegisterRemember from './LoginRegisterRemember'
+import LoginForm from './Login'
 
 export default {
   name: 'Dashboard',
   components: {
-    LoginRegisterRemember
+    LoginForm
   },
   data () {
     return {
@@ -48,26 +48,7 @@ export default {
   transform: translate(-50%, -50%);
 }
 
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-
 .login__container {
   @include centerer;
-}
-
-body {
-  background-color: rgb(54, 56, 62);
 }
 </style>
