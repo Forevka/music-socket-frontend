@@ -40,7 +40,7 @@ export default {
 @mixin centerer {
   position: absolute;
   top: 50%;
-  left: calc(50% + 50px);
+  left: calc(50% - 50px);
   transform: translate(-50%, -50%);
 }
 

@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import moment from 'moment'
 import { StatusIndicator } from 'vue-status-indicator'
 import Avatar from 'vue-avatar'
@@ -122,15 +123,18 @@ export default {
     }
   },
   created () {
+    Vue.prototype.$channel = this
+    console.log('child')
     let thisChannel = this.$parent.isThisChannelExist(Number(this.$route.params.id))
     if (thisChannel.length === 1) {
       this.channel = thisChannel[0]
-      if (this.$parent.current_user.role === 'Guest') {
-        console.log('not logged')
-      }
     } else {
       this.$router.replace({ name: 'ChannelDoesntExist' })
     }
+    store.dispatch('change_channel', {
+      channelId: thisChannel[0].id
+    })
+    this.$connect()
   },
   mounted () {
     let toInsert = [{
@@ -165,18 +169,23 @@ export default {
         return u.status === needStatus && u.username.replace(/ /g, '').toLowerCase().indexOf(s.toLowerCase()) !== -1
       })
     },
+    sendRequest: function (event, body = {}) {
+      return this.$socket.sendObj({'event': event, 'token': store.getters.getUser.token, 'body': body, 'timestamp': this.$moment().unix()})
+    },
     createPost: function () {
       let post = this.post && this.post.trim()
       if (!post) {
         return false
       }
       post = this.generatePost(post)
-      this.insertPost(post)
+      // this.insertPost(post)
+      this.sendRequest('ChatMessage', post)
       this.post = ''
     },
-    insertPost: function (post) {
-      post.timestamp = moment.unix(post.timestamp).format('h:mm')
-      this.posts.push(post)
+    insertPost: function (state, event, message) {
+      console.log(event)
+      event.body.timestamp = moment.unix(event.body.timestamp).format('h:mm')
+      this.posts.push(event.body)
     },
     mentionUser: function (username) {
       this.post += '@' + username + ' '
@@ -188,6 +197,7 @@ export default {
         username: this.currentUser.username,
         avatar: this.currentUser.avatar,
         userid: this.currentUser.userid,
+        channelId: this.currentUser.channelId,
         timestamp: moment().unix()
       }
     }

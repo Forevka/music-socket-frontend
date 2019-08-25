@@ -9,7 +9,7 @@ import FishUI from 'fish-ui'
 
 import VueSidebarMenu from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
-import MenuStore from './stores/modules/MenuStore'
+// import MenuStore from './stores/modules/MenuStore'
 import store from './stores/index'
 import {
   SOCKET_ONOPEN,
@@ -59,7 +59,9 @@ Vue.use(VueNativeSock, 'ws://localhost:5678', {
 new Vue({
   el: '#app',
   router,
-  store: { MenuStore },
+  store: { store },
   components: { App },
   template: '<App/>'
 })
+// console.log(a)
+// a.$connect()

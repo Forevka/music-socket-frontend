@@ -3,7 +3,7 @@
     <div id="formContainer" v-bind:class=classToggle>
       <div class="formLeft">
         <img
-          src="https://avatars0.githubusercontent.com/u/32968153"
+          :src="userImg" class="vert-move"
         />
       </div>
       <div class="formRight">
@@ -96,6 +96,7 @@ import HTTP from './HTTPApi'
 export default {
   data () {
     return {
+      userImg: 'https://ih0.redbubble.net/image.518467355.3879/flat,1000x1000,075,f.u2.jpg',
       msg: 'Login',
       username: '',
       password: '',
@@ -219,9 +220,26 @@ body {
   img {
     display: block;
     width: 72px;
-    border-radius: 50%;
+    border-radius: 70%;
     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
   }
+}
+
+img.vert-move {
+    -webkit-animation: mover 1s infinite  alternate;
+    animation: mover 1s infinite  alternate;
+}
+img.vert-move {
+    -webkit-animation: mover 1s infinite  alternate;
+    animation: mover 1s infinite  alternate;
+}
+@-webkit-keyframes mover {
+    0% { transform: translateY(6px); }
+    100% { transform: translateY(-6px); }
+}
+@keyframes mover {
+    0% { transform: translateY(6px); }
+    100% { transform: translateY(-6px); }
 }
 
 .formRight {

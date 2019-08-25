@@ -49,6 +49,8 @@ export default {
       console.log('message on socket store', message)
       if (message.event === 'Login') {
         Vue.prototype.$mainApp.onLogin(this, message)
+      } else if (message.event === 'ChatMessage') {
+        Vue.prototype.$channel.insertPost(this, message)
       }
     },
     // mutations for reconnect methods

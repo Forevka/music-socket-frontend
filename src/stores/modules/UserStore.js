@@ -8,7 +8,8 @@ const state = {
   username: '',
   role: 'Guest',
   avatar: '',
-  token: ''
+  token: '',
+  channelId: -1
 }
 
 const mutations = {
@@ -18,12 +19,18 @@ const mutations = {
     state.role = userObj.role
     state.token = userObj.token
     state.avatar = userObj.avatar
+  },
+  change_channel (state, channelObj) {
+    state.channelId = channelObj.channelId
   }
 }
 
 const actions = {
   change_user (context, payload) {
     context.commit('change_user', payload)
+  },
+  change_channel (context, payload) {
+    context.commit('change_channel', payload)
   }
 }
 

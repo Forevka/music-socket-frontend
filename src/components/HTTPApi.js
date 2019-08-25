@@ -39,7 +39,7 @@ class HTTP {
           token: response.data.token
         })
         localStorage.token = response.data.token
-        Vue.prototype.$awn.success('Successfully loged')
+        Vue.prototype.$awn.success('Successfully logged as ' + response.data.login)
       })
       .catch(error => { Vue.prototype.$awn.alert(this.parseError(error)) })
   }

@@ -11,6 +11,7 @@
 import HTTP from './components/HTTPApi'
 import Vue from 'vue'
 import SideMenu from './components/SideMenu'
+import store from './stores/index'
 
 export default {
   name: 'App',
@@ -19,14 +20,6 @@ export default {
   },
   data () {
     return {
-      current_user: {
-        avatar: 'https://ui-avatars.com/api/?name=Unnamed&size=128&background=b0a0a1',
-        username: '',
-        password: '',
-        socketStore: null,
-        role: 'Guest',
-        userid: -1
-      },
       available_channels: [
         {
           id: 0,
@@ -37,14 +30,15 @@ export default {
     }
   },
   created () {
+    console.log('father')
     Vue.prototype.$mainApp = this
+    if (localStorage.token) {
+      HTTP.Instance().getMe(localStorage.token)
+    }
   },
   mounted () {
     Vue.prototype.$mainApp = this
     // this.loginHttp('volodia', '000000')
-    if (localStorage.token) {
-      HTTP.Instance().getMe(localStorage.token)
-    }
   },
   methods: {
     isThisChannelExist: function (channelId) {
@@ -54,25 +48,18 @@ export default {
       })
     },
     sendRequest: function (event, body = {}) {
-      return Vue.prototype.$socket.sendObj({'event': event, 'body': body, 'timestamp': this.$moment().unix()})
+      return Vue.prototype.$socket.sendObj({'event': event, 'token': store.getters.getUser.token, 'body': body, 'timestamp': this.$moment().unix()})
     },
     onLogin: function (state, event, message) {
-      this.current_user.role = message.body.role
-      this.current_user.user_id = message.body.user_id
-      this.current_user.channel = message.body.channel
-      this.current_user.user_name = message.body.user_name
-      this.current_user.password = message.body.password
+      console.log(event.body)
     },
     onError: function (state, event) {
       console.log('on error app')
     },
     onOpen: function (state, event) {
       console.log('on open app')
-      if (localStorage.user_name && localStorage.password) {
-        this.sendRequest('Login', {
-          'username': localStorage.user_name,
-          'password': localStorage.password
-        })
+      if (localStorage.token) {
+        this.sendRequest('Login', store.getters.getUser)
       }
     },
     onClose: function (state, event) {
