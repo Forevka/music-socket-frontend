@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import HTTP from './HTTPApi'
 import store from '../stores/index'
 import LoginForm from './Login'
 

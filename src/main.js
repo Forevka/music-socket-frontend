@@ -49,6 +49,7 @@ Vue.use(VueMoment, {
   moment
 })
 Vue.use(VueNativeSock, 'ws://localhost:5678', {
+  connectManually: true,
   format: 'json',
   store: store,
   mutations: SocketMutations

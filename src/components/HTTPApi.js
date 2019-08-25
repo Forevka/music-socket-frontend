@@ -32,16 +32,44 @@ class HTTP {
     })
       .then(response => {
         store.dispatch('change_user', {
-          userid: 0,
-          username: login,
-          password: password,
-          avatar: 'https://avatars0.githubusercontent.com/u/32968153',
-          role: 'Member',
+          userid: response.data.id,
+          username: response.data.login,
+          avatar: response.data.img_url,
+          role: this.convertRole(response.data.role),
           token: response.data.token
+        })
+        localStorage.token = response.data.token
+        Vue.prototype.$awn.success('Successfully loged')
+      })
+      .catch(error => { Vue.prototype.$awn.alert(this.parseError(error)) })
+  }
+
+  getMe (token) {
+    let config = {
+      headers: {
+        token: token
+      }
+    }
+    this._http.post('/methods/get_me', {asd: '1'}, config)
+      .then(response => {
+        store.dispatch('change_user', {
+          userid: response.data.id,
+          username: response.data.login,
+          avatar: response.data.img_url,
+          role: this.convertRole(response.data.role),
+          token: localStorage.token
         })
         Vue.prototype.$awn.success('Successfully loged')
       })
       .catch(error => { Vue.prototype.$awn.alert(this.parseError(error)) })
+  }
+
+  convertRole (roleId) {
+    if (roleId === 1) {
+      return 'Member'
+    } else {
+      return 'Guest'
+    }
   }
 
   parseError (error) {

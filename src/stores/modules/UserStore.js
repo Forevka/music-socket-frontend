@@ -8,8 +8,7 @@ const state = {
   username: '',
   role: 'Guest',
   avatar: '',
-  token: '',
-  password: ''
+  token: ''
 }
 
 const mutations = {
@@ -19,9 +18,6 @@ const mutations = {
     state.role = userObj.role
     state.token = userObj.token
     state.avatar = userObj.avatar
-    state.password = userObj.password
-
-    localStorage.token = state.token
   }
 }
 
