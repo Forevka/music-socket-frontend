@@ -8,7 +8,7 @@ class HTTP {
 
   constructor () {
     this._http = axios.create({
-      timeout: 1000,
+      timeout: 2000,
       baseURL: 'http://127.0.0.1:443',
       headers: {
         'Accept': '*/*',
@@ -59,7 +59,7 @@ class HTTP {
           role: this.convertRole(response.data.role),
           token: localStorage.token
         })
-        Vue.prototype.$awn.success('Successfully loged')
+        Vue.prototype.$awn.success('Successfully loged as ' + response.data.login)
       })
       .catch(error => { Vue.prototype.$awn.alert(this.parseError(error)) })
   }
@@ -72,7 +72,32 @@ class HTTP {
     }
   }
 
+  getChannels (page = 0) {
+    this._http.post('/get_channels_list', {page: page})
+      .then(response => {
+        // store.dispatch('add_channel_list', response.data.channels)
+      })
+      .catch(error => { Vue.prototype.$awn.alert(this.parseError(error)) })
+  }
+
+  getAllChannels (page = 0) {
+    this._http.post('/get_all_channel_list', {})
+      .then(response => {
+        store.dispatch('add_channel_list', response.data.channels)
+      })
+      .catch(error => { Vue.prototype.$awn.alert(this.parseError(error)) })
+  }
+
+  getChannelById (chId) {
+    return this._http.post('/get_channel', {id: chId})
+      .then(response => {
+        return response.data
+      })
+      .catch(error => { Vue.prototype.$awn.alert(this.parseError(error)) })
+  }
+
   parseError (error) {
+    console.log(error)
     return error.response.data.message
   }
 }

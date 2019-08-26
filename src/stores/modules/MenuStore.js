@@ -16,12 +16,12 @@ const state = {
       title: 'Menu'
     },
     {
-      href: '/',
+      href: '/dashboard',
       title: 'User',
       icon: 'fa fa-user'
     },
     {
-      href: '/channel/0',
+      href: '/channel/1',
       title: 'Channel',
       icon: 'fa fa-bullhorn'
     }

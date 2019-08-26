@@ -1,5 +1,6 @@
 <template>
-<div class="grid">
+<LoadingSpinner v-if='loading'></LoadingSpinner>
+<div class="grid" v-else>
   <div class="main">
     <div class="main__container">
       <div class="main__settings">
@@ -62,15 +63,19 @@ import { StatusIndicator } from 'vue-status-indicator'
 import Avatar from 'vue-avatar'
 import VueEmoji from 'emoji-vue'
 import store from '../stores/index'
+import HTTP from './HTTPApi'
+import LoadingSpinner from './LoadingSpinner'
 
 export default {
   components: {
     StatusIndicator,
     Avatar,
-    VueEmoji
+    VueEmoji,
+    LoadingSpinner
   },
   data () {
     return {
+      loading: true,
       active: false,
       post: '',
       searchQuery: '',
@@ -125,35 +130,32 @@ export default {
   created () {
     Vue.prototype.$channel = this
     console.log('child')
-    let thisChannel = this.$parent.isThisChannelExist(Number(this.$route.params.id))
-    if (thisChannel.length === 1) {
-      this.channel = thisChannel[0]
+    let thisChannel = store.getters.get_channel_by_id(Number(this.$route.params.id))
+    if (thisChannel === undefined) {
+      HTTP.Instance().getChannelById(Number(this.$route.params.id)).then(r => {
+        store.dispatch('change_current_channel', r)
+        this.loading = false
+        Vue.prototype.$awn.success('Channel ' + r.id)
+      })
+        .catch(error => {
+          if (store.getters.get_current_channel.id !== -1) {
+            this.channel = thisChannel
+          } else {
+            this.loading = false
+            this.$router.replace({ name: 'ChannelDoesntExist' })
+          }
+          console.log(error)
+        })
     } else {
-      this.$router.replace({ name: 'ChannelDoesntExist' })
+      store.dispatch('change_current_channel', thisChannel)
+      this.loading = false
+      this.channel = thisChannel
     }
-    store.dispatch('change_channel', {
-      channelId: thisChannel[0].id
-    })
+    this.channel = store.getters.get_current_channel
     this.$connect()
   },
   mounted () {
-    let toInsert = [{
-      text: 'asd',
-      username: 'Forevka',
-      avatar: 'https://ui-avatars.com/api/?name=Forevka&size=128&background=b0a0a1',
-      userid: 1,
-      timestamp: '1565968319'
-    },
-    {
-      text: 'lol',
-      username: 'volodia',
-      avatar: 'https://ui-avatars.com/api/?name=volodia',
-      userid: 2,
-      timestamp: '1565968319'
-    }]
-    for (let i = 0; i < toInsert.length; i++) {
-      this.insertPost(toInsert[i])
-    }
+    //
   },
   updated () {
     this.$nextTick(() => {
@@ -568,5 +570,4 @@ input {
   @include flex(null, center, null);
   border-bottom: 0.025rem solid $background-nav;
 }
-
 </style>

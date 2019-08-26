@@ -5,7 +5,7 @@
   "author": "Forevka <starfield@i.ua>",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --disable-host-check --host 0.0.0.0",
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js"
@@ -17,6 +17,7 @@
     "axios": "^0.19.0",
     "buefy": "^0.8.2",
     "emoji-vue": "^0.2.4",
+    "epic-spinners": "^1.1.0",
     "fish-ui": "^1.1.74",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",

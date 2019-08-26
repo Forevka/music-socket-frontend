@@ -35,18 +35,13 @@ export default {
     if (localStorage.token) {
       HTTP.Instance().getMe(localStorage.token)
     }
+    HTTP.Instance().getAllChannels()
   },
   mounted () {
     Vue.prototype.$mainApp = this
     // this.loginHttp('volodia', '000000')
   },
   methods: {
-    isThisChannelExist: function (channelId) {
-      let chId = channelId
-      return this.available_channels.filter(function (u) {
-        return u.id === chId
-      })
-    },
     sendRequest: function (event, body = {}) {
       return Vue.prototype.$socket.sendObj({'event': event, 'token': store.getters.getUser.token, 'body': body, 'timestamp': this.$moment().unix()})
     },
