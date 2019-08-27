@@ -311,12 +311,11 @@ input {
 /* Root grid */
 
 .grid {
-  position: relative;
+  position: fixed;
   display: grid;
   grid-template-columns: 22rem 1fr;
-  height: 100vh;
-  width: calc(100vw - 50px);
-  left: 50px;
+  width: 100vw;
+  // max-height: calc(100% - 3.25em)
 }
 
 /* Header */
@@ -400,10 +399,12 @@ input {
 .chat {
   background: $background-main;
   padding: 0rem 0rem 0rem;
+  height: calc(100vh - 3.25em);
   &__chat {
     height: calc(100vh - 10rem);
     overflow-y: scroll;
     padding: 1rem;
+    padding-bottom: 3.25em;
   }
   &__post {
     @include flex(null, flex-start, null);
@@ -415,6 +416,8 @@ input {
     }
   }
   &__input {
+    position: relative;
+    bottom: 3.25em;
     padding: 1rem;
   }
 }
@@ -475,6 +478,7 @@ input {
 
 .main {
   background: $background-header-chat;
+  height: calc(100vh - 3.25em);
   &__container {
     display: grid;
     grid-template-rows: 5rem 1fr;
