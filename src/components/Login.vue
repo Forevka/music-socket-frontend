@@ -94,6 +94,7 @@ import HTTP from './HTTPApi'
 // import store from '../stores/index'
 
 export default {
+  props: ['isModal'],
   data () {
     return {
       userImg: 'https://ih0.redbubble.net/image.518467355.3879/flat,1000x1000,075,f.u2.jpg',
@@ -117,7 +118,7 @@ export default {
   },
   methods: {
     loginHttp: function () {
-      HTTP.Instance().login(this.username, this.password)
+      HTTP.Instance().login(this.username, this.password).then(() => { if (this.isModal) { this.$parent.close() } })
     },
     activeForgot: function () {
       this.forgotForm = !this.forgotForm

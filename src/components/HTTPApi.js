@@ -26,7 +26,7 @@ class HTTP {
   }
 
   login (login, password) {
-    this._http.post('/authentication', {
+    return this._http.post('/authentication', {
       login: login,
       password: password
     })
@@ -59,7 +59,7 @@ class HTTP {
           role: this.convertRole(response.data.role),
           token: localStorage.token
         })
-        Vue.prototype.$awn.success('Successfully loged as ' + response.data.login)
+        Vue.prototype.$awn.success('Successfully logged as ' + response.data.login)
       })
       .catch(error => { Vue.prototype.$awn.alert(this.parseError(error)) })
   }

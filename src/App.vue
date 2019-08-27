@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="mainapp">
    <!--<SideMenu/>-->
-    <b-navbar class="navbar" fixed-top type="is-dark" is-transparent>
+    <b-navbar class="navbar" fixed-top type="is-dark" is-transparent v-if="!isLoged">
       <template slot="start">
         <b-navbar-item class="navbar-left" href="#/dashboard">Dashboard</b-navbar-item>
         <b-navbar-item class="navbar-left" href="#">Channels</b-navbar-item>
@@ -12,6 +12,21 @@
         <b-navbar-item tag="div" class="navbar-right">
           <div class="buttons">
             <a class="button is-light" @click="cardModal()">Log in</a>
+          </div>
+        </b-navbar-item>
+      </template>
+    </b-navbar>
+    <b-navbar class="navbar" fixed-top type="is-dark" is-transparent v-else>
+      <template slot="start">
+        <b-navbar-item class="navbar-left" href="#/dashboard">Dashboard</b-navbar-item>
+        <b-navbar-item class="navbar-left" href="#">Channels</b-navbar-item>
+        <b-navbar-item class="navbar-left" href="#/channel/1">Channel 1</b-navbar-item>
+      </template>
+
+      <template slot="end">
+        <b-navbar-item tag="div" class="navbar-right">
+          <div class="buttons">
+            <a class="button is-light" @click="Logout()">Log out</a>
           </div>
         </b-navbar-item>
       </template>
@@ -36,13 +51,6 @@ export default {
   },
   data () {
     return {
-      available_channels: [
-        {
-          id: 0,
-          name: 'Default channel',
-          user_amount: 2
-        }
-      ]
     }
   },
   created () {
@@ -86,11 +94,30 @@ export default {
       this.$buefy.modal.open({
         parent: this,
         component: Login,
+        props: {
+          'isModal': true
+        },
         hasModalCard: true,
         animation: 'fade',
         customClass: 'custom-class custom-class-2',
         canCancel: ['escape', 'outside']
       })
+    },
+    Logout () {
+      store.dispatch('change_user', {
+        userid: -1,
+        username: '',
+        avatar: '',
+        role: 'Guest',
+        token: ''
+      })
+      localStorage.removeItem('token')
+      this.$awn.success('Logged out')
+    }
+  },
+  computed: {
+    isLoged () {
+      return store.getters.getUser.role !== 'Guest'
     }
   }
 }
