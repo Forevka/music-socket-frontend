@@ -5,9 +5,7 @@
     <div class="main__container">
       <div class="main__settings">
         <div class="settings__group">
-          <div class="group__setting"></div>
-          <div class="group__setting"></div>
-          <div class="group__setting"></div>
+          <ChannelDropdown/>
         </div><input class="search__input" type="text" v-model="searchQuery" placeholder="Type for Search"/></div>
       <div class="main__friends">
         <div class="friend__category" v-for="(category, index) in availabeCategories" :key='index'>{{ category.name }}
@@ -65,13 +63,15 @@ import VueEmoji from 'emoji-vue'
 import store from '../stores/index'
 import HTTP from './HTTPApi'
 import LoadingSpinner from './LoadingSpinner'
+import ChannelDropdown from './ChannelDropdown'
 
 export default {
   components: {
     StatusIndicator,
     Avatar,
     VueEmoji,
-    LoadingSpinner
+    LoadingSpinner,
+    ChannelDropdown
   },
   data () {
     return {
@@ -211,7 +211,7 @@ export default {
     timestamp () {
       return moment().format('h:mm')
     },
-    currentUser: function () {
+    currentUser () {
       return store.getters.getUser
     }
   }
@@ -399,12 +399,10 @@ input {
 .chat {
   background: $background-main;
   padding: 0rem 0rem 0rem;
-  height: calc(100vh - 3.25em);
   &__chat {
     height: calc(100vh - 10rem);
     overflow-y: scroll;
     padding: 1rem;
-    padding-bottom: 3.25em;
   }
   &__post {
     @include flex(null, flex-start, null);
@@ -416,8 +414,6 @@ input {
     }
   }
   &__input {
-    position: relative;
-    bottom: 3.25em;
     padding: 1rem;
   }
 }
@@ -478,7 +474,7 @@ input {
 
 .main {
   background: $background-header-chat;
-  height: calc(100vh - 3.25em);
+  height: 100vh;
   &__container {
     display: grid;
     grid-template-rows: 5rem 1fr;

@@ -1,36 +1,7 @@
 <template>
   <div id="app" class="mainapp">
    <!--<SideMenu/>-->
-    <b-navbar class="navbar" fixed-top type="is-dark" is-transparent v-if="!isLoged">
-      <template slot="start">
-        <b-navbar-item class="navbar-left" href="#/dashboard">Dashboard</b-navbar-item>
-        <b-navbar-item class="navbar-left" href="#">Channels</b-navbar-item>
-        <b-navbar-item class="navbar-left" href="#/channel/1">Channel 1</b-navbar-item>
-      </template>
-
-      <template slot="end">
-        <b-navbar-item tag="div" class="navbar-right">
-          <div class="buttons">
-            <a class="button is-light" @click="cardModal()">Log in</a>
-          </div>
-        </b-navbar-item>
-      </template>
-    </b-navbar>
-    <b-navbar class="navbar" fixed-top type="is-dark" is-transparent v-else>
-      <template slot="start">
-        <b-navbar-item class="navbar-left" href="#/dashboard">Dashboard</b-navbar-item>
-        <b-navbar-item class="navbar-left" href="#">Channels</b-navbar-item>
-        <b-navbar-item class="navbar-left" href="#/channel/1">Channel 1</b-navbar-item>
-      </template>
-
-      <template slot="end">
-        <b-navbar-item tag="div" class="navbar-right">
-          <div class="buttons">
-            <a class="button is-light" @click="Logout()">Log out</a>
-          </div>
-        </b-navbar-item>
-      </template>
-    </b-navbar>
+    <!--<NavBarMenu/>-->
     <transition name="fade">
       <router-view/>
     </transition>
@@ -41,13 +12,14 @@
 import HTTP from './components/HTTPApi'
 import Vue from 'vue'
 import SideMenu from './components/SideMenu'
-import Login from './components/Login'
+import NavBarMenu from './components/NavBarMenu'
 import store from './stores/index'
 
 export default {
   name: 'App',
   components: {
-    SideMenu
+    SideMenu,
+    NavBarMenu
   },
   data () {
     return {
@@ -89,35 +61,6 @@ export default {
     },
     onReconnectError: function (state, event) {
       console.log('on reconnect error app')
-    },
-    cardModal () {
-      this.$buefy.modal.open({
-        parent: this,
-        component: Login,
-        props: {
-          'isModal': true
-        },
-        hasModalCard: true,
-        animation: 'fade',
-        customClass: 'custom-class custom-class-2',
-        canCancel: ['escape', 'outside']
-      })
-    },
-    Logout () {
-      store.dispatch('change_user', {
-        userid: -1,
-        username: '',
-        avatar: '',
-        role: 'Guest',
-        token: ''
-      })
-      localStorage.removeItem('token')
-      this.$awn.success('Logged out')
-    }
-  },
-  computed: {
-    isLoged () {
-      return store.getters.getUser.role !== 'Guest'
     }
   }
 }
@@ -130,6 +73,10 @@ html {
 
 body {
   background-color: rgb(29, 29, 29);
-  padding-top: 3.25em;
+  // padding-top: 3.25em;
+}
+
+.navbar {
+  max-height: 3.25em;
 }
 </style>
