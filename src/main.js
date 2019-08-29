@@ -48,8 +48,7 @@ Vue.use(VueSidebarMenu)
 Vue.use(VueMoment, {
   moment
 })
-Vue.use(VueNativeSock, 'ws://localhost:5678', {
-  connectManually: true,
+Vue.use(VueNativeSock, '/websocket', {
   format: 'json',
   store: store,
   mutations: SocketMutations
