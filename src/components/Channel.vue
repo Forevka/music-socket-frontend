@@ -185,6 +185,15 @@ export default {
         return u.status === needStatus && u.username.replace(/ /g, '').toLowerCase().indexOf(s.toLowerCase()) !== -1
       })
     },
+    deleteUserList: function (state, event, message) {
+      console.log(event)
+      var i = this.users.length
+      while (i--) {
+        if (this.users[i].userid === event.body.id) {
+          this.users.splice(i, 1)
+        }
+      }
+    },
     sendRequest: function (event, body = {}) {
       return this.$socket.sendObj({'event': event, 'token': store.getters.getUser.token, 'body': body, 'timestamp': this.$moment().unix()})
     },

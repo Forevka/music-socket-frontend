@@ -58,6 +58,8 @@ export default {
         Vue.prototype.$channel.onChangeStatus(this, message)
       } else if (message.event === 'UserList') {
         Vue.prototype.$channel.onUserList(this, message)
+      } else if (message.event === 'DeleteUserList') {
+        Vue.prototype.$channel.deleteUserList(this, message)
       }
     },
     // mutations for reconnect methods
