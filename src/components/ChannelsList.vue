@@ -1,4 +1,8 @@
 <template>
+    <div>
+    <div id="page-description">
+      <span>Choose Channel</span>
+    </div>
     <section id="channel-list" ref="channelsList">
         <b-table
             :data="data"
@@ -14,14 +18,19 @@
             aria-next-label="Next page"
             aria-previous-label="Previous page"
             aria-page-label="Page"
-            aria-current-label="Current page">
+            aria-current-label="Current page"
+
+            backend-sorting
+            :default-sort-direction="defaultSortOrder"
+            :default-sort="[sortField, sortOrder]"
+            @sort="onSort">
 
             <template slot-scope="props">
-                <b-table-column field="channel_id" label="ID" numeric sortable>
+                <b-table-column field="id" label="ID" numeric sortable>
 {{ props.row.id }}
                 </b-table-column>
 
-                <b-table-column field="channel_name" label="Name" sortable>
+                <b-table-column field="name" label="Name" sortable>
     {{ props.row.name }}
                 </b-table-column>
 
@@ -35,6 +44,7 @@
             </template>
         </b-table>
     </section>
+    </div>
 </template>
 
 <script>
@@ -48,7 +58,7 @@ export default {
       data: [],
       total: 0,
       loading: false,
-      sortField: 'vote_count',
+      sortField: 'id',
       sortOrder: 'desc',
       defaultSortOrder: 'desc',
       page: 1,
@@ -64,7 +74,7 @@ export default {
   methods: {
     loadData: function () {
       this.loading = true
-      HTTP.Instance().getChannels(this.page, this.perPage).then(r => {
+      HTTP.Instance().getChannels(this.page, this.perPage, this.sortField, this.sortOrder === 'desc').then(r => {
         console.log(r)
         this.data = r.channels
         this.total = r.total_channels
@@ -76,7 +86,12 @@ export default {
       this.loadData()
     },
     linkToChannel (id) {
-      this.$router.replace({ name: 'Channel', params: {id} })// return '#/channel/' + id
+      this.$router.push({ name: 'Channel', params: {id} })// return '#/channel/' + id
+    },
+    onSort (field, order) {
+      this.sortField = field
+      this.sortOrder = order
+      this.loadData()
     }
   },
   filters: {
@@ -91,7 +106,18 @@ export default {
 
 <style lang="scss" scoped>
 #channel-list {
+  padding-top: 5em;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+#page-description {
   padding-top: 4em;
+  text-align: center;
+  span {
+    font-weight:bold;
+    font-size: 200%;
+  }
 }
 
 .pagination-list {

@@ -72,8 +72,8 @@ class HTTP {
     }
   }
 
-  getChannels (page, amount) {
-    return this._http.post('/get_channel_page', {page: page, amount: amount})
+  getChannels (page, amount, sortBy, asc) {
+    return this._http.post('/get_channel_page', {page: page, amount: amount, sort_by: sortBy, asc: asc})
       .then(response => {
         return response.data
       })
