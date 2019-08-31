@@ -9,6 +9,26 @@
       <b>{{ currentUser.username }}</b>
     </b-dropdown-item>
     <hr class="dropdown-divider" aria-role="menuitem" />
+    <b-field>
+      <b-radio-button v-model="radioStatus"
+          :native-value="1"
+          type="is-success">
+          <span>Online</span>
+      </b-radio-button>
+
+      <b-radio-button v-model="radioStatus"
+          :native-value="3"
+          type="is-warning">
+          <span>DND</span>
+      </b-radio-button>
+
+      <b-radio-button v-model="radioStatus"
+          :native-value="2"
+          type="is-danger">
+          <span>Offline</span>
+      </b-radio-button>
+    </b-field>
+    <hr class="dropdown-divider" aria-role="menuitem" />
     <b-dropdown-item href="#/dashboard" value="settings">
       <b-icon pack="fas" icon="cog"></b-icon> Dashboard
     </b-dropdown-item>
@@ -30,7 +50,9 @@ import store from '../stores/index'
 
 export default {
   data () {
-    return {}
+    return {
+      radioStatus: 1
+    }
   },
   methods: {
     cardModal () {
@@ -64,6 +86,11 @@ export default {
     },
     currentUser: function () {
       return store.getters.getUser
+    }
+  },
+  watch: {
+    radioStatus: function (newValue, oldValue) {
+      this.$emit('changeStatus', newValue)
     }
   }
 }

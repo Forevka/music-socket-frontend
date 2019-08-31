@@ -48,7 +48,7 @@ Vue.use(VueSidebarMenu)
 Vue.use(VueMoment, {
   moment
 })
-Vue.use(VueNativeSock, 'ws://localhost:5678', {
+Vue.use(VueNativeSock, process.env.URL_WEBSOCKET_BASE, {
   connectManually: true,
   format: 'json',
   store: store,

@@ -27,7 +27,7 @@
       <div class="box__description-title">Whoops!</div>
       <div class="box__description-text">It seems like we couldn't find channel you were looking for</div>
     </div>
-    <a href="#" target="_blank" class="box__button">Go back</a>
+    <a href="#/channels" class="box__button">Go back</a>
   </div>
 </div>
 </template>

@@ -23,7 +23,8 @@
             backend-sorting
             :default-sort-direction="defaultSortOrder"
             :default-sort="[sortField, sortOrder]"
-            @sort="onSort">
+            @sort="onSort"
+            icon-pack="fas">
 
             <template slot-scope="props">
                 <b-table-column field="id" label="ID" numeric sortable>

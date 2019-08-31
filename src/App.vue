@@ -27,6 +27,9 @@ export default {
     }
   },
   created () {
+    console.log(process.env.NODE_ENV)
+    console.log(process.env.URL_HTTP_BASE)
+    console.log(process.env.URL_WEBSOCKET_BASE)
     console.log(this.$route.path)
     console.log('father')
     Vue.prototype.$mainApp = this
@@ -85,7 +88,10 @@ html {
 }
 
 body {
-  background-color: rgb(29, 29, 29);
+  // background-color: rgb(29, 29, 29);
   // padding-top: 3.25em;
+  // background: #141E30;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, rgb(29, 29, 29), rgb(17, 26, 43));  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, rgb(29, 29, 29), rgb(17, 26, 43)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 </style>

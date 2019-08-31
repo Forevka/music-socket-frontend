@@ -5,7 +5,7 @@
     <div class="main__container">
       <div class="main__settings">
         <div class="settings__group">
-          <ChannelDropdown/>
+          <ChannelDropdown @changeStatus="changeStatus"/>
         </div><input class="search__input" type="text" v-model="searchQuery" placeholder="Type for Search"/></div>
       <div class="main__friends">
         <div class="friend__category" v-for="(category, index) in availabeCategories" :key='index'>{{ category.name }}
@@ -75,6 +75,7 @@ export default {
   },
   data () {
     return {
+      radioButtonStatus: 1,
       loading: true,
       active: false,
       post: '',
@@ -99,31 +100,7 @@ export default {
       channel: {
         name: 'Default'
       },
-      users: [{
-        username: 'Forevka',
-        avatar: 'https://ui-avatars.com/api/?name=Forevka&size=128&background=b0a0a1',
-        userid: 1,
-        status: 1
-      },
-      {
-        username: 'volodia',
-        avatar: 'https://ui-avatars.com/api/?name=volodia&size=128&background=b0a0a1',
-        userid: 2,
-        status: 1
-      },
-      {
-        username: 'off',
-        avatar: 'https://ui-avatars.com/api/?name=off&size=128&background=b0a0a1',
-        userid: 3,
-        status: 2
-      },
-      {
-        username: 'dont disturb me',
-        avatar: 'https://ui-avatars.com/api/?name=dont+disturb+me&size=128&background=b0a0a1',
-        userid: 4,
-        status: 3
-      }
-      ],
+      users: [],
       posts: []
     }
   },
@@ -180,6 +157,27 @@ export default {
     onSocketMessage: function (data) {
       console.log(data)
     },
+    onLogin: function (state, event, message) {
+      console.log(event.body)
+      this.insertUser(event.body)
+    },
+    insertUser: function (user) {
+      if (user.id !== -1) {
+        this.users.push({
+          username: user.login,
+          avatar: user.avatar,
+          userid: user.id,
+          status: user.status,
+          role: user.role
+        })
+      }
+    },
+    onUserList: function (state, event, message) {
+      console.log(event)
+      event.body.forEach(newUser => {
+        this.insertUser(newUser)
+      })
+    },
     getUsersStatusList: function (userList, status) {
       let needStatus = status
       let s = this.searchQuery.replace(/ /g, '')
@@ -217,6 +215,20 @@ export default {
         channelId: this.currentUser.channelId,
         timestamp: moment().unix()
       }
+    },
+    changeStatus: function (status) {
+      this.sendRequest('ChangeStatus', {status: status})
+    },
+    onChangeStatus: function (state, event, message) {
+      console.log(event)
+      let needId = event.body.id
+      let user = this.users.filter(function (u) {
+        return u.userid === needId
+      })
+      if (user.length > 0) {
+        user[0].status = event.body.status
+      }
+      console.log(user)
     }
   },
   computed: {
@@ -228,6 +240,11 @@ export default {
     },
     currentUser () {
       return store.getters.getUser
+    }
+  },
+  watch: {
+    radioButtonStatus: function (newValue, oldValue) {
+      console.log(newValue, oldValue)
     }
   }
 }

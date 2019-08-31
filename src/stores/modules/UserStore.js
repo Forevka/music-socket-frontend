@@ -9,6 +9,7 @@ const state = {
   role: 'Guest',
   avatar: '',
   token: '',
+  status: 1,
   channelId: -1
 }
 
@@ -22,6 +23,9 @@ const mutations = {
   },
   change_channel (state, channelObj) {
     state.channelId = channelObj.channelId
+  },
+  change_status (state, statusObj) {
+    state.status = statusObj.status
   }
 }
 
@@ -31,12 +35,18 @@ const actions = {
   },
   change_channel (context, payload) {
     context.commit('change_channel', payload)
+  },
+  change_status (context, payload) {
+    context.commit('change_status', payload)
   }
 }
 
 const getters = {
   getUser (state) {
     return state
+  },
+  getStatus (state) {
+    return state.status
   }
 }
 

@@ -9,7 +9,7 @@ class HTTP {
   constructor () {
     this._http = axios.create({
       timeout: 2000,
-      baseURL: 'http://127.0.0.1:443',
+      baseURL: process.env.URL_HTTP_BASE,
       headers: {
         'Accept': '*/*',
         'Content-Type': 'application/json'
