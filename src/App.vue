@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="mainapp">
    <!--<SideMenu/>-->
-    <!--<NavBarMenu/>-->
+    <NavBarMenu v-if="showNavBar"/>
     <transition name="fade">
       <router-view/>
     </transition>
@@ -23,15 +23,17 @@ export default {
   },
   data () {
     return {
+      showNavBar: true
     }
   },
   created () {
+    console.log(this.$route.path)
     console.log('father')
     Vue.prototype.$mainApp = this
     if (localStorage.token) {
       HTTP.Instance().getMe(localStorage.token)
     }
-    HTTP.Instance().getAllChannels()
+    // HTTP.Instance().getAllChannels()
   },
   mounted () {
     Vue.prototype.$mainApp = this
@@ -49,9 +51,9 @@ export default {
     },
     onOpen: function (state, event) {
       console.log('on open app')
-      if (localStorage.token) {
+      /* if (localStorage.token) {
         this.sendRequest('Login', store.getters.getUser)
-      }
+      } */
     },
     onClose: function (state, event) {
       console.log('on close app')
@@ -61,6 +63,17 @@ export default {
     },
     onReconnectError: function (state, event) {
       console.log('on reconnect error app')
+    }
+  },
+  watch: {
+    $route: function (newRoute, oldRoute) {
+      console.log(oldRoute, newRoute)
+      console.log(newRoute.name)
+      if (newRoute.name === 'Channel') {
+        this.showNavBar = false
+      } else {
+        this.showNavBar = true
+      }
     }
   }
 }
@@ -74,9 +87,5 @@ html {
 body {
   background-color: rgb(29, 29, 29);
   // padding-top: 3.25em;
-}
-
-.navbar {
-  max-height: 3.25em;
 }
 </style>

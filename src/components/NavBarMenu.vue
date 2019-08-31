@@ -2,8 +2,7 @@
   <b-navbar class="navbar" fixed-top type="is-dark" is-transparent v-if="!isLoged">
     <template slot="start">
       <b-navbar-item class="navbar-left" href="#/dashboard">Dashboard</b-navbar-item>
-      <b-navbar-item class="navbar-left" href="#">Channels</b-navbar-item>
-      <b-navbar-item class="navbar-left" href="#/channel/1">Channel 1</b-navbar-item>
+      <b-navbar-item class="navbar-left" href="#/channels">Channels</b-navbar-item>
     </template>
 
     <template slot="end">
@@ -17,13 +16,12 @@
   <b-navbar class="navbar" fixed-top type="is-dark" is-transparent v-else>
     <template slot="start">
       <b-navbar-item class="navbar-left" href="#/dashboard">Dashboard</b-navbar-item>
-      <b-navbar-item class="navbar-left" href="#">Channels</b-navbar-item>
-      <b-navbar-item class="navbar-left" href="#/channel/1">Channel 1</b-navbar-item>
+      <b-navbar-item class="navbar-left" href="#/channels">Channels</b-navbar-item>
     </template>
 
     <template slot="end">
       <b-navbar-item tag="div" class="navbar-right">
-        <b-dropdown v-model="navigation" position="is-bottom-left" aria-role="menu">
+        <b-dropdown position="is-bottom-left" hoverable aria-role="menu">
           <a class="navbar-item" slot="trigger">
             <img :src="currentUser.avatar" />
             <b-icon pack="fas" icon="angle-down"></b-icon>

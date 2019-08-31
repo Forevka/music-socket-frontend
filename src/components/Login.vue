@@ -43,7 +43,7 @@
               <input type="password" v-model="password" placeholder=" " />
               <div class="border"></div>
             </label>
-            <button :disabled=loginFormValid type="button" v-on:click="loginHttp">Login</button>
+            <button :disabled=loginFormValid type="button" v-on:click="login">Login</button>
           </section>
           <footer>
             <button type="button" class="forgotBtn" v-on:click="activeForgot()">Forgot password?</button>
@@ -91,7 +91,7 @@
 
 <script>
 import HTTP from './HTTPApi'
-// import store from '../stores/index'
+import store from '../stores/index'
 
 export default {
   props: ['isModal'],
@@ -117,8 +117,15 @@ export default {
     }
   },
   methods: {
-    loginHttp: function () {
-      HTTP.Instance().login(this.username, this.password).then(() => { if (this.isModal) { this.$parent.close() } })
+    login: function () {
+      HTTP.Instance().login(this.username, this.password).then(() => {
+        if (this.isModal) {
+          this.$parent.close()
+          if (this.$channel) {
+            this.$channel.sendRequest('Login', store.getters.getUser)
+          }
+        }
+      })
     },
     activeForgot: function () {
       this.forgotForm = !this.forgotForm

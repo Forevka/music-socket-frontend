@@ -128,31 +128,41 @@ export default {
     }
   },
   created () {
+    Vue.prototype.$mainApp.showNavBar = false
     Vue.prototype.$channel = this
     console.log('child')
-    let thisChannel = store.getters.get_channel_by_id(Number(this.$route.params.id))
-    if (thisChannel === undefined) {
-      HTTP.Instance().getChannelById(Number(this.$route.params.id)).then(r => {
-        store.dispatch('change_current_channel', r)
+    // let thisChannel = store.getters.get_channel_by_id(Number(this.$route.params.id))
+    // if (thisChannel === undefined) {
+    HTTP.Instance().getChannelById(Number(this.$route.params.id)).then(r => {
+      store.dispatch('change_current_channel', r)
+      store.dispatch('change_channel', { channelId: Number(this.$route.params.id) })
+      this.loading = false
+      Vue.prototype.$awn.success('Channel ' + r.id)
+    })
+      .catch(error => {
+        /* if (store.getters.get_current_channel.id !== -1) {
+          this.channel = thisChannel
+        } else { */
         this.loading = false
-        Vue.prototype.$awn.success('Channel ' + r.id)
+        this.$router.replace({ name: 'ChannelDoesntExist' })
+        // }
+        console.log(error)
       })
-        .catch(error => {
-          if (store.getters.get_current_channel.id !== -1) {
-            this.channel = thisChannel
-          } else {
-            this.loading = false
-            this.$router.replace({ name: 'ChannelDoesntExist' })
-          }
-          console.log(error)
-        })
-    } else {
+    /* } else {
       store.dispatch('change_current_channel', thisChannel)
+      store.dispatch('change_channel', {channelId: Number(this.$route.params.id)})
       this.loading = false
       this.channel = thisChannel
-    }
+    } */
     this.channel = store.getters.get_current_channel
     this.$connect()
+  },
+  beforeDestroy () {
+    this.$disconnect()
+    Vue.prototype.$channel = undefined
+  },
+  afterDestroy () {
+    Vue.prototype.$mainApp.showNavBar = true
   },
   mounted () {
     //
@@ -164,6 +174,12 @@ export default {
     })
   },
   methods: {
+    onSocketOpen: function (data) {
+      this.sendRequest('Login', store.getters.getUser)
+    },
+    onSocketMessage: function (data) {
+      console.log(data)
+    },
     getUsersStatusList: function (userList, status) {
       let needStatus = status
       let s = this.searchQuery.replace(/ /g, '')
@@ -179,9 +195,8 @@ export default {
       if (!post) {
         return false
       }
-      post = this.generatePost(post)
       // this.insertPost(post)
-      this.sendRequest('ChatMessage', post)
+      this.sendRequest('ChatMessage', this.generatePost(post))
       this.post = ''
     },
     insertPost: function (state, event, message) {

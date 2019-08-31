@@ -9,10 +9,10 @@
       <b>{{ currentUser.username }}</b>
     </b-dropdown-item>
     <hr class="dropdown-divider" aria-role="menuitem" />
-    <b-dropdown-item value="settings">
-      <b-icon pack="fas" icon="cog"></b-icon> Settings
+    <b-dropdown-item href="#/dashboard" value="settings">
+      <b-icon pack="fas" icon="cog"></b-icon> Dashboard
     </b-dropdown-item>
-    <b-dropdown-item value="settings">
+    <b-dropdown-item href="#/channels" value="settings">
       <b-icon pack="fas" icon="bullhorn"></b-icon> Channels
     </b-dropdown-item>
     <b-dropdown-item @click="Logout()" value="logout" aria-role="menuitem">

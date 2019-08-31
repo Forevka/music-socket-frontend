@@ -9,6 +9,7 @@ class HTTP {
   constructor () {
     this._http = axios.create({
       timeout: 2000,
+      baseURL: 'http://127.0.0.1:443',
       headers: {
         'Accept': '*/*',
         'Content-Type': 'application/json'
@@ -71,10 +72,10 @@ class HTTP {
     }
   }
 
-  getChannels (page = 0) {
-    this._http.post('/get_channels_list', {page: page})
+  getChannels (page, amount) {
+    return this._http.post('/get_channel_page', {page: page, amount: amount})
       .then(response => {
-        // store.dispatch('add_channel_list', response.data.channels)
+        return response.data
       })
       .catch(error => { Vue.prototype.$awn.alert(this.parseError(error)) })
   }

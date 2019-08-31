@@ -29,7 +29,6 @@ export default {
   },
   computed: {
     isLoged () {
-      console.log(window.location.pathname)
       return store.getters.getUser.role !== 'Guest'
     }
   }

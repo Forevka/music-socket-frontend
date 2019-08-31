@@ -32,6 +32,7 @@ export default {
       state.socket.isConnected = true
       console.log('connected', event)
       Vue.prototype.$mainApp.onOpen(state, event)
+      Vue.prototype.$channel.onSocketOpen(state, event)
     },
     [SOCKET_ONCLOSE] (state, event) {
       state.socket.isConnected = false
