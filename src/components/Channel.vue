@@ -28,7 +28,8 @@
       <div class="chat__channel">
         <div class="header__title">{{ channel.name }}</div>
       </div>
-      <div class="chat__chat" ref="chat">
+      <div class="chat__chat" ref="chat" @scroll="onChatScroll">
+        <b-progress type="is-info" v-if="loadingHistory" v-animate-css="'fadeIn'"></b-progress>
         <div class="chat__post" v-for="(post, index) in posts" :key='index' v-animate-css="'fadeIn'">
           <div class="post__avatar" v-bind:style="{'background-image': 'url('+post.avatar+')'}"></div>
           <div class="post__content">
@@ -75,8 +76,12 @@ export default {
   },
   data () {
     return {
+      needScroll: true,
+      haveHistory: true,
+      messageHistoryPage: 1,
       radioButtonStatus: 1,
       loading: true,
+      loadingHistory: true,
       active: false,
       post: '',
       searchQuery: '',
@@ -101,7 +106,8 @@ export default {
         name: 'Default'
       },
       users: [],
-      posts: []
+      posts: [],
+      mentionRegex: /\B@\w+/g
     }
   },
   created () {
@@ -145,10 +151,14 @@ export default {
     //
   },
   updated () {
-    this.$nextTick(() => {
-      let chat = this.$refs.chat
-      chat.scrollTop = chat.scrollHeight
-    })
+    if (this.needScroll) {
+      this.$nextTick(() => {
+        let chat = this.$refs.chat
+        chat.scrollTop = chat.scrollHeight
+      })
+    } else {
+      this.needScroll = true
+    }
   },
   methods: {
     onSocketOpen: function (data) {
@@ -176,6 +186,19 @@ export default {
       console.log(event)
       event.body.forEach(newUser => {
         this.insertUser(newUser)
+      })
+    },
+    onMessageListHistory: function (state, event, message) {
+      this.loadingHistory = false
+      console.log(event.body)
+      this.needScroll = false
+      if (event.body.length < 20) {
+        this.haveHistory = false
+      }
+      event.body.forEach(message => {
+        message.timestamp = moment.unix(message.timestamp).format('h:mm')
+        this.checkMention(message.text)
+        this.posts.unshift(message)
       })
     },
     getUsersStatusList: function (userList, status) {
@@ -209,7 +232,26 @@ export default {
     insertPost: function (state, event, message) {
       console.log(event)
       event.body.timestamp = moment.unix(event.body.timestamp).format('h:mm')
+      this.checkMention(event.body.text)
       this.posts.push(event.body)
+    },
+    checkMention: function (text) {
+      let m
+      while ((m = this.mentionRegex.exec(text)) !== null) {
+        // This is necessary to avoid infinite loops with zero-width matches
+        if (m.index === this.mentionRegex.lastIndex) {
+          this.mentionRegex.lastIndex++
+        }
+
+        // The result can be accessed through the `m`-variable.
+        m.forEach((match, groupIndex) => {
+          console.log(`Found match, group ${groupIndex}: ${match}`)
+          console.log(this.currentUser.username)
+          if (match.replace('@', '') === this.currentUser.username) {
+            Vue.prototype.$awn.info('You mentioned')
+          }
+        })
+      }
     },
     mentionUser: function (username) {
       this.post += '@' + username + ' '
@@ -238,6 +280,15 @@ export default {
         user[0].status = event.body.status
       }
       console.log(user)
+    },
+    onChatScroll ({target: { scrollTop, clientHeight, scrollHeight }}) {
+      if (scrollTop === 0 && this.haveHistory === true) {
+        this.needScroll = false
+        this.messageHistoryPage += 1
+        console.log(this.messageHistoryPage)
+        this.sendRequest('MessageListHistory', this.messageHistoryPage)
+        this.loadingHistory = true
+      }
     }
   },
   computed: {
@@ -322,8 +373,17 @@ $font-family-text: "acumin-pro", sans-serif;
   }
 }
 
-/* Elements */
+/* Animations */
+@keyframes pulse {
+  0% {
+    background-color: red;
+  }
+  100% {
+    background-color: #323232;
+  }
+}
 
+/* Elements */
 html {
   box-sizing: border-box;
 }
@@ -446,6 +506,7 @@ input {
     padding: 1rem;
   }
   &__post {
+    // animation: pulse 1s ease-out;
     @include flex(null, flex-start, null);
     position: relative;
     padding: 10px 10px;
