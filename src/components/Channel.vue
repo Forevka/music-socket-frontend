@@ -225,7 +225,7 @@ export default {
       }
     },
     sendRequest: function (event, body = {}) {
-      return this.$socket.sendObj({'event': event, 'token': store.getters.getUser.token, 'body': body, 'timestamp': this.$moment().unix()})
+      return this.$socket.sendObj({'event': event, 'token': store.getters.getUser.token, 'body': body, 'timestamp': moment().unix()})
     },
     createPost: function () {
       let post = this.post && this.post.trim()

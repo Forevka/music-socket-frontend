@@ -11,6 +11,7 @@
 <script>
 import HTTP from './components/HTTPApi'
 import Vue from 'vue'
+import moment from 'moment'
 import SideMenu from './components/SideMenu'
 import NavBarMenu from './components/NavBarMenu'
 import store from './stores/index'
@@ -44,7 +45,7 @@ export default {
   },
   methods: {
     sendRequest: function (event, body = {}) {
-      return Vue.prototype.$socket.sendObj({'event': event, 'token': store.getters.getUser.token, 'body': body, 'timestamp': this.$moment().unix()})
+      return Vue.prototype.$socket.sendObj({'event': event, 'token': store.getters.getUser.token, 'body': body, 'timestamp': moment().unix()})
     },
     onLogin: function (state, event, message) {
       console.log(event.body)

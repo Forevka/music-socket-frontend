@@ -17,8 +17,6 @@ import {
   SOCKET_RECONNECT_ERROR
 } from './stores/modules/SocketMutationTypes'
 import VueAWN from 'vue-awesome-notifications'
-import VueMoment from 'vue-moment'
-import moment from 'moment-timezone'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import VAnimateCss from 'v-animate-css'
@@ -40,9 +38,6 @@ Vue.use(VAnimateCss)
 Vue.use(Buefy)
 Vue.use(VueAWN)
 Vue.use(Vuex)
-Vue.use(VueMoment, {
-  moment
-})
 Vue.use(VueNativeSock, process.env.URL_WEBSOCKET_BASE, {
   connectManually: true,
   format: 'json',
