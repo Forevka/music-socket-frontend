@@ -1,56 +1,63 @@
 <template>
 <LoadingSpinner v-if='loading'></LoadingSpinner>
-<div class="grid" v-else>
-  <div class="main">
-    <div class="main__container">
-      <div class="main__settings">
-        <div class="settings__group">
-          <ChannelDropdown @changeStatus="changeStatus"/>
-        </div><input class="search__input" type="text" v-model="searchQuery" placeholder="Type for Search"/></div>
-      <div class="main__friends">
-        <div class="friend__category" v-for="(category, index) in availabeCategories" :key='index'>{{ category.name }}
-          <div class="friend__status" v-for="user in getUsersStatusList(users, category.status)" :key="user.userid">
-            <!--<avatar :username=user.username :src=user.avatar></avatar>-->
-            <div class="friend__avatar" v-bind:style="{'background': 'url('+user.avatar+')', 'border-radius': '50%', 'min-height': '2rem', 'min-width': '2rem', 'background-position': 'center', 'background-size': '100% 100%'}">
-              <div class="avatar__status"  v-bind:style="{'background': category.color, 'border-radius': '50%', 'min-height': '0.8rem', 'min-width': '0.8rem'}"></div>
-              <!--<status-indicator class="avatar__status" status="active" pulse/>-->
+<div v-else>
+  <div class="grid" v-if='exist'>
+    <div class="main">
+      <div class="main__container">
+        <div class="main__settings">
+          <div class="settings__group">
+            <ChannelDropdown @changeStatus="changeStatus"/>
+          </div><input class="search__input" type="text" v-model="searchQuery" placeholder="Type for Search"/></div>
+        <div class="main__friends">
+          <div class="friend__category" v-for="(category, index) in availabeCategories" :key='index'>{{ category.name }}
+            <div class="friend__status" v-for="user in getUsersStatusList(users, category.status)" :key="user.userid">
+              <!--<avatar :username=user.username :src=user.avatar></avatar>-->
+              <div class="friend__avatar" v-bind:style="{'background': 'url('+user.avatar+')', 'border-radius': '50%', 'min-height': '2rem', 'min-width': '2rem', 'background-position': 'center', 'background-size': '100% 100%'}">
+                <div class="avatar__status"  v-bind:style="{'background': category.color, 'border-radius': '50%', 'min-height': '0.8rem', 'min-width': '0.8rem'}"></div>
+                <!--<status-indicator class="avatar__status" status="active" pulse/>-->
+              </div>
+              <div class="friend__user">
+                <div class="user__name" v-on:click="mentionUser(user.username)">{{ user.username }}</div>
+              </div>
             </div>
-            <div class="friend__user">
-              <div class="user__name" v-on:click="mentionUser(user.username)">{{ user.username }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="chat">
+      <div class="chat__container">
+        <div class="chat__channel">
+          <div class="header__title">{{ channel.name }}</div>
+        </div>
+        <div class="chat__chat" ref="chat" @scroll="onChatScroll">
+          <b-progress type="is-info" v-if="loadingHistory" v-animate-css="'fadeIn'" show-value>
+            Loading messages...
+          </b-progress>
+          <div class="chat__post" v-for="(post, index) in posts" :key='index' v-animate-css="'fadeIn'">
+            <div class="post__avatar" v-bind:style="{'background-image': 'url('+post.avatar+')'}"></div>
+            <div class="post__content">
+              <div class="post__name" v-on:click="mentionUser(post.username)">{{ post.username }}</div>
+              <div class="post__timestamp">{{ post.timestamp }}</div>
+              <div class="post__is_you">{{ post.userid === currentUser.userid ? 'You' : ''}}</div>
+              <div class="post__message">{{ post.text }}</div>
             </div>
+          </div>
+        </div>
+        <div class="chat__input" v-if="isLoged">
+          <div class="input__container">
+            <input class="input__message" type="text" placeholder="Enter message" v-model="post" @keyup.enter="createPost" ref="inputPost"/>
+          </div>
+        </div>
+        <div class="chat__input" v-else>
+          <div class="input__container">
+            <input disabled class="input__message" type="text" placeholder="Need to login" v-model="post" @keyup.enter="createPost" ref="inputPost"/>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="chat">
-    <div class="chat__container">
-      <div class="chat__channel">
-        <div class="header__title">{{ channel.name }}</div>
-      </div>
-      <div class="chat__chat" ref="chat" @scroll="onChatScroll">
-        <b-progress type="is-info" v-if="loadingHistory" v-animate-css="'fadeIn'"></b-progress>
-        <div class="chat__post" v-for="(post, index) in posts" :key='index' v-animate-css="'fadeIn'">
-          <div class="post__avatar" v-bind:style="{'background-image': 'url('+post.avatar+')'}"></div>
-          <div class="post__content">
-            <div class="post__name" v-on:click="mentionUser(post.username)">{{ post.username }}</div>
-            <div class="post__timestamp">{{ post.timestamp }}</div>
-            <div class="post__is_you">{{ post.userid === currentUser.userid ? 'You' : ''}}</div>
-            <div class="post__message">{{ post.text }}</div>
-          </div>
-        </div>
-      </div>
-      <div class="chat__input" v-if="isLoged">
-        <div class="input__container">
-          <input class="input__message" type="text" placeholder="Enter message" v-model="post" @keyup.enter="createPost" ref="inputPost"/>
-        </div>
-      </div>
-      <div class="chat__input" v-else>
-        <div class="input__container">
-          <input disabled class="input__message" type="text" placeholder="Need to login" v-model="post" @keyup.enter="createPost" ref="inputPost"/>
-        </div>
-      </div>
-    </div>
+  <div v-else>
+    <ChannelDoesntExist/>
   </div>
 </div>
 </template>
@@ -65,17 +72,20 @@ import store from '../stores/index'
 import HTTP from './HTTPApi'
 import LoadingSpinner from './LoadingSpinner'
 import ChannelDropdown from './ChannelDropdown'
+import ChannelDoesntExist from './ChannelDoesntExist'
 
 export default {
   components: {
     StatusIndicator,
     Avatar,
     VueEmoji,
+    ChannelDoesntExist,
     LoadingSpinner,
     ChannelDropdown
   },
   data () {
     return {
+      exist: true,
       needScroll: true,
       haveHistory: true,
       messageHistoryPage: 1,
@@ -127,7 +137,8 @@ export default {
           this.channel = thisChannel
         } else { */
         this.loading = false
-        this.$router.replace({ name: 'ChannelDoesntExist' })
+        this.exist = false
+        // this.$router.replace({ name: 'ChannelDoesntExist' })
         // }
         console.log(error)
       })
@@ -197,7 +208,7 @@ export default {
       }
       event.body.forEach(message => {
         message.timestamp = moment.unix(message.timestamp).format('h:mm')
-        this.checkMention(message.text)
+        // this.checkMention(message.text)
         this.posts.unshift(message)
       })
     },

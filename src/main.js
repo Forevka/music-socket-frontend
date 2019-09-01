@@ -5,10 +5,7 @@ import App from './App'
 import router from './router'
 import VueNativeSock from 'vue-native-websocket'
 import Vuex from 'vuex'
-import FishUI from 'fish-ui'
 
-import VueSidebarMenu from 'vue-sidebar-menu'
-import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 // import MenuStore from './stores/modules/MenuStore'
 import store from './stores/index'
 import {
@@ -42,9 +39,7 @@ Vue.config.productionTip = false
 Vue.use(VAnimateCss)
 Vue.use(Buefy)
 Vue.use(VueAWN)
-Vue.use(FishUI)
 Vue.use(Vuex)
-Vue.use(VueSidebarMenu)
 Vue.use(VueMoment, {
   moment
 })
