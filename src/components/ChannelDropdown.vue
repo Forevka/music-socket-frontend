@@ -39,9 +39,12 @@
       <b-icon pack="fas" icon="sign-out-alt"></b-icon> Logout
     </b-dropdown-item>
   </b-dropdown>
-  <div class="buttons" v-else>
-    <a class="button is-light" @click="cardModal()">Log in</a>
-  </div>
+  <b-dropdown aria-role="menu" hoverable v-else>
+    <a class="button is-light" slot="trigger" @click="cardModal()">Log in</a>
+    <b-dropdown-item href="#/channels" value="settings">
+      <b-icon pack="fas" icon="bullhorn"></b-icon> Channels
+    </b-dropdown-item>
+  </b-dropdown>
 </template>
 
 <script>
@@ -78,6 +81,7 @@ export default {
       })
       localStorage.removeItem('token')
       this.$awn.success('Logged out')
+      this.$emit('userLogout')
     }
   },
   computed: {

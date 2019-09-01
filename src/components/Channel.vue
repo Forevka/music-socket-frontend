@@ -6,7 +6,7 @@
       <div class="main__container">
         <div class="main__settings">
           <div class="settings__group">
-            <ChannelDropdown @changeStatus="changeStatus"/>
+            <ChannelDropdown @changeStatus="changeStatus" @userLogout="userLogout"/>
           </div><input class="search__input" type="text" v-model="searchQuery" placeholder="Type for Search"/></div>
         <div class="main__friends">
           <div class="friend__category" v-for="(category, index) in availabeCategories" :key='index'>{{ category.name }}
@@ -66,8 +66,6 @@
 import Vue from 'vue'
 import moment from 'moment'
 import { StatusIndicator } from 'vue-status-indicator'
-import Avatar from 'vue-avatar'
-import VueEmoji from 'emoji-vue'
 import store from '../stores/index'
 import HTTP from './HTTPApi'
 import LoadingSpinner from './LoadingSpinner'
@@ -77,8 +75,6 @@ import ChannelDoesntExist from './ChannelDoesntExist'
 export default {
   components: {
     StatusIndicator,
-    Avatar,
-    VueEmoji,
     ChannelDoesntExist,
     LoadingSpinner,
     ChannelDropdown
@@ -287,9 +283,13 @@ export default {
       let user = this.users.filter(function (u) {
         return u.userid === needId
       })
-      if (user.length > 0) {
-        user[0].status = event.body.status
-      }
+      user.forEach(user => {
+        user.status = event.body.status
+      })
+
+      this.users = this.users.filter(function (u) {
+        return u.status !== -1
+      })
       console.log(user)
     },
     onChatScroll ({target: { scrollTop, clientHeight, scrollHeight }}) {
@@ -300,6 +300,9 @@ export default {
         this.sendRequest('MessageListHistory', this.messageHistoryPage)
         this.loadingHistory = true
       }
+    },
+    userLogout: function () {
+      this.sendRequest('ChangeStatus', {status: -1})
     }
   },
   computed: {
