@@ -50,7 +50,7 @@
 
 <script>
 // import Vue from 'vue'
-import HTTP from './HTTPApi'
+import HTTP from '@/utils/HTTPApi'
 
 export default {
   name: 'ChannelsList',

@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Dashboard from '@/components/Dashboard'
-import Channel from '@/components/Channel'
-import ChannelsList from '@/components/ChannelsList'
+import Dashboard from '@/views/Dashboard'
+import Channel from '@/views/Channel'
+import ChannelsList from '@/views/ChannelsList'
 
 Vue.use(Router)
 

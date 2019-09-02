@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import HTTP from './HTTPApi'
+import HTTP from '@/utils/HTTPApi'
 import store from '../stores/index'
 
 export default {

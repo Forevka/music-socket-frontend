@@ -6,7 +6,7 @@
 
 <script>
 import store from '../stores/index'
-import LoginForm from './Login'
+import LoginForm from '@/components/Login'
 
 export default {
   name: 'Dashboard',

@@ -67,10 +67,10 @@ import Vue from 'vue'
 import moment from 'moment'
 import { StatusIndicator } from 'vue-status-indicator'
 import store from '../stores/index'
-import HTTP from './HTTPApi'
-import LoadingSpinner from './LoadingSpinner'
-import ChannelDropdown from './ChannelDropdown'
-import ChannelDoesntExist from './ChannelDoesntExist'
+import HTTP from '@/utils/HTTPApi'
+import LoadingSpinner from '@/components/LoadingSpinner'
+import ChannelDropdown from '@/components/ChannelDropdown'
+import ChannelDoesntExist from '@/components/ChannelDoesntExist'
 
 export default {
   components: {

@@ -9,17 +9,15 @@
 </template>
 
 <script>
-import HTTP from './components/HTTPApi'
+import HTTP from './utils/HTTPApi'
 import Vue from 'vue'
 import moment from 'moment'
-import SideMenu from './components/SideMenu'
 import NavBarMenu from './components/NavBarMenu'
 import store from './stores/index'
 
 export default {
   name: 'App',
   components: {
-    SideMenu,
     NavBarMenu
   },
   data () {

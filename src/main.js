@@ -19,6 +19,7 @@ import {
 import VueAWN from 'vue-awesome-notifications'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
+// import 'bulma-pro/css/bulma.css'
 import VAnimateCss from 'v-animate-css'
 
 require('vue-awesome-notifications/dist/styles/style.css')
